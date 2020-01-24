@@ -1,0 +1,92 @@
+#![enable(implicit_some)]
+Container(
+    transform: (
+        id: "menu",
+        anchor: Middle,
+        pivot: Middle,
+    ),
+    children: [
+        Label(
+            transform: (
+                id: "title",
+                y: 200.0,
+                width: 600.0,
+                height: 150.0,
+                anchor: Middle,
+                mouse_reactive: false,
+            ),
+            text: (
+                text: "Arkanoid",
+                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font_size: 100.0,
+                color: (1.0, 1.0, 1.0, 1.0),
+            ),
+        ),
+        Label(
+            transform: (
+                id: "cursor_new_game",
+                x: -180.0,
+                y: 0.0,
+                width: 100.0,
+                height: 50.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "\u{25ba}",
+                font: File("fonts/hack.ttf", ("TTF", ())),
+                font_size: 50.0,
+                color: (1.0, 1.0, 1.0, 1.0),
+            ),
+        ),
+        Label(
+            transform: (
+                id: "cursor_exit",
+                x: -110.0,
+                y: -100.0,
+                width: 100.0,
+                height: 50.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "\u{25ba}",
+                font: File("fonts/hack.ttf", ("TTF", ())),
+                font_size: 50.0,
+                color: (1.0, 1.0, 1.0, 0.0),
+            ),
+        ),
+        Label(
+            transform: (
+                id: "new_game",
+                y: 0.0,
+                width: 300.0,
+                height: 50.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "NEW GAME",
+                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font_size: 50.0,
+                color: (1.0, 1.0, 1.0, 1.0),
+            ),
+        ),
+        Label(
+            transform: (
+                id: "exit",
+                y: -100.0,
+                width: 150.0,
+                height: 50.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "EXIT",
+                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font_size: 50.0,
+                color: (1.0, 1.0, 1.0, 1.0),
+            ),
+        ),
+    ]
+)
