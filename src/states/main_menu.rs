@@ -32,7 +32,7 @@ impl SimpleState for MainMenuState {
     fn on_start(&mut self, data: StateData<GameData>) {
         let world = data.world;
 
-        let main_menu = world.read_resource::<PrefabHandles>().main_menu.clone();
+        let main_menu = world.read_resource::<PrefabHandles>().menu.main_menu.clone();
 
         self.main_menu = Some(world.create_entity().with(main_menu).build());
     }

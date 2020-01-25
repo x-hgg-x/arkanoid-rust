@@ -1,8 +1,12 @@
-use crate::components::PrefabHandles;
+use crate::components::{CameraPrefabData, GamePrefabHandles, MenuPrefabHandles, PrefabHandles};
 use crate::states::MainMenuState;
 
-use amethyst::{assets::ProgressCounter, prelude::*, ui::UiLoader};
-
+use amethyst::{
+    assets::{PrefabLoader, ProgressCounter, RonFormat},
+    prelude::*,
+    renderer::sprite::prefab::SpriteScenePrefab,
+    ui::UiLoader,
+};
 #[derive(Default)]
 pub struct LoadingState {
     progress_counter: ProgressCounter,
@@ -13,8 +17,13 @@ impl SimpleState for LoadingState {
         let world = data.world;
 
         let main_menu = world.exec(|loader: UiLoader| loader.load("ui/main_menu.ron", &mut self.progress_counter));
+        let camera = world.exec(|loader: PrefabLoader<CameraPrefabData>| loader.load("prefabs/camera.ron", RonFormat, &mut self.progress_counter));
+        let background = world.exec(|loader: PrefabLoader<SpriteScenePrefab>| loader.load("prefabs/background.ron", RonFormat, &mut self.progress_counter));
 
-        world.insert(PrefabHandles { main_menu });
+        world.insert(PrefabHandles {
+            menu: MenuPrefabHandles { main_menu },
+            game: GamePrefabHandles { camera, background },
+        });
     }
 
     fn update(&mut self, _data: &mut StateData<GameData>) -> SimpleTrans {
