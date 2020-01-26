@@ -1,7 +1,12 @@
+mod bundle;
 mod components;
+mod resources;
 mod states;
+mod systems;
 
+use bundle::ArkanoidBundle;
 use components::{ArkanoidPrefabData, CameraPrefabData};
+use resources::CurrentState;
 use states::LoadingState;
 
 use arkanoid_precompile::PrecompiledBundle;
@@ -16,6 +21,7 @@ fn main() -> amethyst::Result<()> {
             bindings_config_path: String::from("config/bindings.ron"),
             display_config_path: String::from("config/display.ron"),
         })?
+        .with_bundle(ArkanoidBundle)?
         .with_system_desc(PrefabLoaderSystemDesc::<CameraPrefabData>::default(), "", &[])
         .with_system_desc(PrefabLoaderSystemDesc::<SpriteScenePrefab>::default(), "", &[])
         .with_system_desc(PrefabLoaderSystemDesc::<ArkanoidPrefabData>::default(), "", &[]);
@@ -24,6 +30,7 @@ fn main() -> amethyst::Result<()> {
 
     Application::build("assets", LoadingState::default())?
         .with_frame_limit_config(frame_limiter_config)
+        .with_resource(CurrentState::default())
         .build(game_data)?
         .run();
 

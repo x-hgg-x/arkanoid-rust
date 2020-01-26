@@ -1,6 +1,6 @@
 (
     axes: {
-        Paddle: Emulated(pos: Key(Left), neg: Key(Right)),
+        Paddle: Emulated(pos: Key(Right), neg: Key(Left)),
     },
     actions: {},
 )
