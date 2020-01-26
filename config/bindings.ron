@@ -2,5 +2,7 @@
     axes: {
         Paddle: Emulated(pos: Key(Right), neg: Key(Left)),
     },
-    actions: {},
+    actions: {
+        ReleaseBall: [[Key(W)], [Key(Z)]],
+    },
 )

@@ -23,8 +23,17 @@ pub struct PlayerPaddle {
 #[prefab(Component)]
 #[serde(deny_unknown_fields)]
 pub struct Ball {
-    pub velocity: Vector2<f32>,
     pub radius: f32,
+    pub velocity: f32,
+    pub direction: Vector2<f32>,
+}
+
+#[derive(Debug, Clone, Component, Deserialize, Serialize, PrefabData)]
+#[prefab(Component)]
+#[serde(deny_unknown_fields)]
+pub struct StickyBall {
+    pub width_extent: f32,
+    pub period: f32,
 }
 
 #[derive(Debug, Clone, Component, Deserialize, Serialize, PrefabData)]
@@ -40,7 +49,7 @@ pub struct Block {
 #[serde(deny_unknown_fields)]
 pub enum ArkanoidElementPrefab {
     PlayerPaddle(PlayerPaddle),
-    Ball(Ball),
+    Ball { ball: Ball, sticky: Option<StickyBall> },
     Block(Block),
 }
 
