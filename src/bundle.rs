@@ -15,6 +15,7 @@ impl<'a, 'b> SystemBundle<'a, 'b> for ArkanoidBundle {
         builder.add(MovePaddleSystem.pausable(CurrentState::Running), "paddle_system", &["input_system"]);
         builder.add(StickyBallSystem::default().pausable(CurrentState::Running), "sticky_ball_system", &["paddle_system"]);
         builder.add(MoveBallSystem.pausable(CurrentState::Running), "move_ball_system", &["sticky_ball_system"]);
+        builder.add(CollisionSystem.pausable(CurrentState::Running), "collision_system", &["paddle_system", "move_ball_system"]);
         Ok(())
     }
 }

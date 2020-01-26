@@ -39,7 +39,7 @@ impl<'s> System<'s> for StickyBallSystem {
                 ball_transform.prepend_translation_x(sticky_ball.width_extent / 2.0 * (2.0 * PI * self.time / sticky_ball.period).sin());
 
                 // Set ball direction
-                let angle = (paddle_x - ball_transform.translation().x) / paddle_width * PI * 11.0 / 12.0;
+                let angle = ((paddle_x - ball_transform.translation().x) / paddle_width * PI).min(PI / 3.0).max(-PI / 3.0);
                 ball.direction.x = -angle.sin();
                 ball.direction.y = angle.cos();
             }
