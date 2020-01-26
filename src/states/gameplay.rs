@@ -14,11 +14,12 @@ impl SimpleState for GameplayState {
     fn on_start(&mut self, data: StateData<GameData>) {
         let world = data.world;
 
-        let GamePrefabHandles { camera, background, level } = world.read_resource::<PrefabHandles>().game.clone();
+        let GamePrefabHandles { camera, background, level, score } = world.read_resource::<PrefabHandles>().game.clone();
 
         world.create_entity().with(camera).build();
         world.create_entity().with(background).build();
         world.create_entity().with(level).build();
+        world.create_entity().with(score).build();
     }
 
     fn handle_event(&mut self, _data: StateData<GameData>, event: StateEvent) -> SimpleTrans {

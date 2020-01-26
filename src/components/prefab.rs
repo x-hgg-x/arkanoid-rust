@@ -17,6 +17,7 @@ pub struct GamePrefabHandles {
     pub camera: Handle<Prefab<CameraPrefabData>>,
     pub background: Handle<Prefab<SpriteScenePrefab>>,
     pub level: Handle<Prefab<SpriteScenePrefab>>,
+    pub score: Handle<UiPrefab>,
 }
 
 #[derive(Clone)]

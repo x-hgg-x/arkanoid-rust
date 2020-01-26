@@ -21,10 +21,11 @@ impl SimpleState for LoadingState {
         let camera = world.exec(|loader: PrefabLoader<CameraPrefabData>| loader.load("prefabs/camera.ron", RonFormat, &mut self.progress_counter));
         let background = world.exec(|loader: PrefabLoader<SpriteScenePrefab>| loader.load("prefabs/background.ron", RonFormat, &mut self.progress_counter));
         let level = world.exec(|loader: PrefabLoader<SpriteScenePrefab>| loader.load("prefabs/level.ron", RonFormat, &mut self.progress_counter));
+        let score = world.exec(|loader: UiLoader| loader.load("ui/score.ron", &mut self.progress_counter));
 
         world.insert(PrefabHandles {
             menu: MenuPrefabHandles { main_menu, pause_menu },
-            game: GamePrefabHandles { camera, background, level },
+            game: GamePrefabHandles { camera, background, level, score },
         });
     }
 
