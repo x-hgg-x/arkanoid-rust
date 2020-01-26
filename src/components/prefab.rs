@@ -9,6 +9,7 @@ use amethyst::{
 #[derive(Clone)]
 pub struct MenuPrefabHandles {
     pub main_menu: Handle<UiPrefab>,
+    pub pause_menu: Handle<UiPrefab>,
 }
 
 #[derive(Clone)]
