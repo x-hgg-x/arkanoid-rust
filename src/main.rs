@@ -1,7 +1,7 @@
 mod components;
 mod states;
 
-use components::CameraPrefabData;
+use components::{ArkanoidPrefabData, CameraPrefabData};
 use states::LoadingState;
 
 use arkanoid_precompile::PrecompiledBundle;
@@ -17,7 +17,8 @@ fn main() -> amethyst::Result<()> {
             display_config_path: String::from("config/display.ron"),
         })?
         .with_system_desc(PrefabLoaderSystemDesc::<CameraPrefabData>::default(), "", &[])
-        .with_system_desc(PrefabLoaderSystemDesc::<SpriteScenePrefab>::default(), "", &[]);
+        .with_system_desc(PrefabLoaderSystemDesc::<SpriteScenePrefab>::default(), "", &[])
+        .with_system_desc(PrefabLoaderSystemDesc::<ArkanoidPrefabData>::default(), "", &[]);
 
     let frame_limiter_config = FrameRateLimitConfig::load("config/frame_limiter.ron");
 

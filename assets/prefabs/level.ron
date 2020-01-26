@@ -3,382 +3,558 @@ Prefab(
     entities: [
         (
             data: (
-                sheet: Sheet(
-                    texture: File("textures/spritesheet.png", (
-                        "IMAGE", (
-                            sampler_info: (
-                                min_filter: Nearest,
-                                mag_filter: Nearest,
-                                mip_filter: Nearest,
-                                wrap_mode: (Tile, Tile, Tile),
-                                lod_bias: (0),
-                                lod_range: (start: (0), end: (8000)),
-                                border: (0),
-                                anisotropic: Off,
+                sprite_scene: (
+                    sheet: Sheet(
+                        texture: File("textures/spritesheet.png", (
+                            "IMAGE", (
+                                sampler_info: (
+                                    min_filter: Nearest,
+                                    mag_filter: Nearest,
+                                    mip_filter: Nearest,
+                                    wrap_mode: (Tile, Tile, Tile),
+                                    lod_bias: (0),
+                                    lod_range: (start: (0), end: (8000)),
+                                    border: (0),
+                                    anisotropic: Off,
+                                ),
                             ),
-                        ),
-                    )),
-                    sprites: [
-                        Grid((
-                            texture_width: 384,
-                            texture_height: 120,
-                            columns: 6,
-                            rows: 3,
-                            cell_size: (64, 32),
                         )),
-                        List((
-                            texture_width: 384,
-                            texture_height: 120,
-                            sprites: [
-                                (x: 0,   y: 96, width: 104, height: 24),
-                                (x: 104, y: 96, width: 24,  height: 24),
-                            ],
-                        )),
-                    ],
-                    name: "arkanoid",
+                        sprites: [
+                            Grid((
+                                texture_width: 384,
+                                texture_height: 120,
+                                columns: 6,
+                                rows: 3,
+                                cell_size: (64, 32),
+                            )),
+                            List((
+                                texture_width: 384,
+                                texture_height: 120,
+                                sprites: [
+                                    (x: 0,   y: 96, width: 104, height: 24),
+                                    (x: 104, y: 96, width: 24,  height: 24),
+                                ],
+                            )),
+                        ],
+                        name: "arkanoid",
+                    ),
+                    render: (
+                        sheet: "arkanoid",
+                        sprite_number: 18,
+                    ),
+                    transform: (
+                        translation: (360.0, 12.0, 0.0),
+                    ),
                 ),
-                render: (
-                    sheet: "arkanoid",
-                    sprite_number: 18,
+                element: PlayerPaddle((
+                    width: 104.0,
+                    height: 24.0,
+                    velocity: 75.0,
+                    health: 5.0,
+                ))
+            ),
+        ),
+        (
+            data: (
+                sprite_scene: (
+                    render: (
+                        sheet: "arkanoid",
+                        sprite_number: 19,
+                    ),
+                    transform: (
+                        translation: (360.0, 36.0, 0.0),
+                    ),
                 ),
-                transform: (
-                    translation: (360.0, 12.0, 0.0),
+                element: Ball((
+                    velocity: [0.0, 0.0],
+                    radius: 22.0,
+                ))
+            ),
+        ),
+        (
+            data: (
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (104.0, 350.0, 0.0)),
                 ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (
-                    sheet: "arkanoid",
-                    sprite_number: 19,
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (104.0, 382.0, 0.0)),
                 ),
-                transform: (
-                    translation: (360.0, 36.0, 0.0),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
+            ),
+        ),
+        (
+            data: (
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (104.0, 414.0, 0.0)),
                 ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (104.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (104.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (104.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (104.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (104.0, 414.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (104.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (104.0, 446.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (168.0, 350.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (104.0, 478.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (168.0, 382.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (104.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (168.0, 414.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (168.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (168.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (168.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (168.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (168.0, 414.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (168.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (168.0, 446.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (232.0, 350.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (168.0, 478.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (232.0, 382.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (168.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (232.0, 414.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (232.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (232.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (232.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (232.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (232.0, 414.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (232.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (232.0, 446.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (296.0, 350.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (232.0, 478.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (296.0, 382.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (232.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (296.0, 414.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (296.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (296.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (296.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (296.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (296.0, 414.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (296.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (296.0, 446.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (360.0, 350.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (296.0, 478.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (360.0, 382.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (296.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (360.0, 414.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (360.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (360.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (360.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (360.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (360.0, 414.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (360.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (360.0, 446.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (424.0, 350.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (360.0, 478.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (424.0, 382.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (360.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (424.0, 414.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (424.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (424.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (424.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (424.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (424.0, 414.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (424.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (424.0, 446.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (488.0, 350.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (424.0, 478.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (488.0, 382.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (424.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (488.0, 414.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (488.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (488.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (488.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (488.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (488.0, 414.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (488.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (488.0, 446.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (552.0, 350.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (488.0, 478.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (552.0, 382.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (488.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (552.0, 414.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (552.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (552.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (552.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (552.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (552.0, 414.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (552.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (552.0, 446.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 0),
+                    transform: (translation: (616.0, 350.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (552.0, 478.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 1),
+                    transform: (translation: (616.0, 382.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (552.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 2),
+                    transform: (translation: (616.0, 414.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 0),
-                transform: (translation: (616.0, 350.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 3),
+                    transform: (translation: (616.0, 446.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 1),
-                transform: (translation: (616.0, 382.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 4),
+                    transform: (translation: (616.0, 478.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
         (
             data: (
-                render: (sheet: "arkanoid", sprite_number: 2),
-                transform: (translation: (616.0, 414.0, 0.0)),
-            ),
-        ),
-        (
-            data: (
-                render: (sheet: "arkanoid", sprite_number: 3),
-                transform: (translation: (616.0, 446.0, 0.0)),
-            ),
-        ),
-        (
-            data: (
-                render: (sheet: "arkanoid", sprite_number: 4),
-                transform: (translation: (616.0, 478.0, 0.0)),
-            ),
-        ),
-        (
-            data: (
-                render: (sheet: "arkanoid", sprite_number: 5),
-                transform: (translation: (616.0, 510.0, 0.0)),
+                sprite_scene: (
+                    render: (sheet: "arkanoid", sprite_number: 5),
+                    transform: (translation: (616.0, 510.0, 0.0)),
+                ),
+                element: Block((width: 64.0, height: 32.0, health: 3.0))
             ),
         ),
     ],

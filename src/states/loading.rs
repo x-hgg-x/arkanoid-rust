@@ -1,4 +1,4 @@
-use crate::components::{CameraPrefabData, GamePrefabHandles, MenuPrefabHandles, PrefabHandles};
+use crate::components::{ArkanoidPrefabData, CameraPrefabData, GamePrefabHandles, MenuPrefabHandles, PrefabHandles};
 use crate::states::MainMenuState;
 
 use amethyst::{
@@ -7,6 +7,7 @@ use amethyst::{
     renderer::sprite::prefab::SpriteScenePrefab,
     ui::UiLoader,
 };
+
 #[derive(Default)]
 pub struct LoadingState {
     progress_counter: ProgressCounter,
@@ -20,7 +21,7 @@ impl SimpleState for LoadingState {
         let pause_menu = world.exec(|loader: UiLoader| loader.load("ui/pause_menu.ron", &mut self.progress_counter));
         let camera = world.exec(|loader: PrefabLoader<CameraPrefabData>| loader.load("prefabs/camera.ron", RonFormat, &mut self.progress_counter));
         let background = world.exec(|loader: PrefabLoader<SpriteScenePrefab>| loader.load("prefabs/background.ron", RonFormat, &mut self.progress_counter));
-        let level = world.exec(|loader: PrefabLoader<SpriteScenePrefab>| loader.load("prefabs/level.ron", RonFormat, &mut self.progress_counter));
+        let level = world.exec(|loader: PrefabLoader<ArkanoidPrefabData>| loader.load("prefabs/level.ron", RonFormat, &mut self.progress_counter));
         let score = world.exec(|loader: UiLoader| loader.load("ui/score.ron", &mut self.progress_counter));
 
         world.insert(PrefabHandles {

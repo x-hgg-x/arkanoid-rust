@@ -16,7 +16,7 @@ pub struct MenuPrefabHandles {
 pub struct GamePrefabHandles {
     pub camera: Handle<Prefab<CameraPrefabData>>,
     pub background: Handle<Prefab<SpriteScenePrefab>>,
-    pub level: Handle<Prefab<SpriteScenePrefab>>,
+    pub level: Handle<Prefab<ArkanoidPrefabData>>,
     pub score: Handle<UiPrefab>,
 }
 
