@@ -7,12 +7,17 @@ use amethyst::{
         SystemDesc, Transform,
     },
     derive::SystemDesc,
-    ecs::{Entities, Join, ReadStorage, System, SystemData, World, WriteStorage},
+    ecs::{Entities, Entity, Join, ReadStorage, System, SystemData, World, Write, WriteStorage},
+    shrev::EventChannel,
 };
 
 use ncollide2d::{query, shape::Cuboid};
 
 use std::f32::consts::PI;
+
+pub struct BlockCollisionEvent {
+    pub entity: Entity,
+}
 
 #[derive(SystemDesc)]
 pub struct CollisionSystem;
@@ -26,11 +31,15 @@ impl<'s> System<'s> for CollisionSystem {
         WriteStorage<'s, Transform>,
         ReadStorage<'s, PlayerPaddle>,
         ReadStorage<'s, Block>,
+        Write<'s, EventChannel<BlockCollisionEvent>>,
     );
 
-    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks): Self::SystemData) {
-        // Get blocks with translation
-        let blocks_translations: Vec<_> = (&blocks, &transforms).join().map(|(block, block_transform)| (block, *block_transform.translation())).collect();
+    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks, mut block_collision_event_channel): Self::SystemData) {
+        // Get blocks with translation and entity
+        let blocks_entities_translations: Vec<_> = (&blocks, &entities, &transforms)
+            .join()
+            .map(|(block, entity, block_transform)| (block, entity, *block_transform.translation()))
+            .collect();
 
         if let Some((paddle, paddle_transform)) = (&paddles, &transforms).join().next() {
             let paddle_x = paddle_transform.translation().x;
@@ -76,7 +85,7 @@ impl<'s> System<'s> for CollisionSystem {
                 }
 
                 // Bounce at the blocks
-                for (block, block_translation) in &blocks_translations {
+                for (block, entity, block_translation) in &blocks_entities_translations {
                     let block_shape = Cuboid::new(Vector2::new(block.width / 2.0, block.height / 2.0));
                     let block_pos = Isometry2::new(Vector2::new(block_translation.x, block_translation.y), math::zero());
 
@@ -84,6 +93,7 @@ impl<'s> System<'s> for CollisionSystem {
                         contact.normal.renormalize();
                         let angle = (-ball.direction.perp(&contact.normal)).atan2(-ball.direction.dot(&contact.normal));
                         ball.direction = -(Rotation2::new(2.0 * angle) * ball.direction).normalize();
+                        block_collision_event_channel.single_write(BlockCollisionEvent { entity: *entity });
                         break;
                     }
                 }
