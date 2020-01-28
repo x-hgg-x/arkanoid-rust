@@ -22,7 +22,7 @@ impl Menu for GameOverState {
         self.selection = selection;
     }
 
-    fn get_menu_ids(&self) -> &[&str] {
+    fn get_cursor_menu_ids(&self) -> &[&str] {
         &["cursor_restart", "cursor_main_menu", "cursor_exit"]
     }
 }

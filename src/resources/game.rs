@@ -9,8 +9,14 @@ pub struct Game {
     pub event: Option<GameEvent>,
 }
 
+pub const NUM_LIFES: i32 = 5;
+
 impl Default for Game {
     fn default() -> Self {
-        Self { lifes: 5, score: 0, event: None }
+        Self {
+            lifes: NUM_LIFES,
+            score: 0,
+            event: None,
+        }
     }
 }

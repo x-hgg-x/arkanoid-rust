@@ -1,6 +1,6 @@
 use crate::components::PrefabHandles;
 use crate::resources::{CurrentState, Game, GameEvent};
-use crate::states::{GameOverState, PausedState};
+use crate::states::{GameOverState, LevelCompleteState, PausedState};
 
 use amethyst::{
     ecs::Join,
@@ -45,11 +45,13 @@ impl SimpleState for GameplayState {
         world.delete_entities(&entities).expect("Failed to delete entity.");
 
         *world.write_resource() = CurrentState::Paused;
+        *world.write_resource::<Game>() = Default::default();
     }
 
     fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans {
         match data.world.write_resource::<Game>().event.take() {
             Some(GameEvent::GameOver) => Trans::Switch(Box::new(GameOverState::default())),
+            Some(GameEvent::LevelComplete) => Trans::Switch(Box::new(LevelCompleteState::default())),
             _ => Trans::None,
         }
     }

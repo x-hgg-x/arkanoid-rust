@@ -22,7 +22,7 @@ impl Menu for MainMenuState {
         self.selection = selection;
     }
 
-    fn get_menu_ids(&self) -> &[&str] {
+    fn get_cursor_menu_ids(&self) -> &[&str] {
         &["cursor_new_game", "cursor_exit"]
     }
 }

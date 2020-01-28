@@ -11,6 +11,7 @@ pub struct MenuPrefabHandles {
     pub main_menu: Handle<UiPrefab>,
     pub pause_menu: Handle<UiPrefab>,
     pub game_over_menu: Handle<UiPrefab>,
+    pub level_complete_menu: Handle<UiPrefab>,
 }
 
 #[derive(Clone)]

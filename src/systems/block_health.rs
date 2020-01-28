@@ -1,10 +1,11 @@
 use crate::components::Block;
+use crate::resources::{Game, GameEvent, NUM_LIFES};
 use crate::systems::BlockCollisionEvent;
 
 use amethyst::{
     core::SystemDesc,
     derive::SystemDesc,
-    ecs::{Entities, Read, System, SystemData, World, WriteStorage},
+    ecs::{Entities, Join, Read, System, SystemData, World, Write, WriteStorage},
     prelude::*,
     renderer::SpriteRender,
     shrev::{EventChannel, ReaderId},
@@ -25,9 +26,16 @@ impl BlockHealthSystem {
 }
 
 impl<'s> System<'s> for BlockHealthSystem {
-    type SystemData = (Entities<'s>, WriteStorage<'s, Block>, WriteStorage<'s, SpriteRender>, Read<'s, EventChannel<BlockCollisionEvent>>);
+    #[allow(clippy::type_complexity)]
+    type SystemData = (
+        Write<'s, Game>,
+        Entities<'s>,
+        WriteStorage<'s, Block>,
+        WriteStorage<'s, SpriteRender>,
+        Read<'s, EventChannel<BlockCollisionEvent>>,
+    );
 
-    fn run(&mut self, (entities, mut blocks, mut sprites, block_collision_event_channel): Self::SystemData) {
+    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel): Self::SystemData) {
         for BlockCollisionEvent { entity } in block_collision_event_channel.read(&mut self.reader) {
             if let (Some(block), Some(sprite)) = (blocks.get_mut(*entity), sprites.get_mut(*entity)) {
                 block.health -= 1.0;
@@ -35,8 +43,15 @@ impl<'s> System<'s> for BlockHealthSystem {
                     sprite.sprite_number += 6;
                 } else {
                     entities.delete(*entity).expect("Failed to delete entity.");
+                    game.score += 1;
                 }
             }
+        }
+
+        let is_start_game = game.lifes == NUM_LIFES && game.score == 0;
+
+        if (&blocks).join().next().is_none() && !is_start_game {
+            game.event = Some(GameEvent::LevelComplete);
         }
     }
 }

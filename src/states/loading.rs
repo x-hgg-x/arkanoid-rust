@@ -15,31 +15,31 @@ pub struct LoadingState {
 
 impl SimpleState for LoadingState {
     fn on_start(&mut self, data: StateData<GameData>) {
+        type SystemData<'s> = (
+            UiLoader<'s>,
+            PrefabLoader<'s, CameraPrefabData>,
+            PrefabLoader<'s, SpriteScenePrefab>,
+            PrefabLoader<'s, ArkanoidPrefabData>,
+        );
+
         let world = data.world;
-
-        let main_menu = world.exec(|loader: UiLoader| loader.load("ui/main_menu.ron", &mut self.progress_counter));
-        let pause_menu = world.exec(|loader: UiLoader| loader.load("ui/pause_menu.ron", &mut self.progress_counter));
-        let game_over_menu = world.exec(|loader: UiLoader| loader.load("ui/game_over_menu.ron", &mut self.progress_counter));
-        let camera = world.exec(|loader: PrefabLoader<CameraPrefabData>| loader.load("prefabs/camera.ron", RonFormat, &mut self.progress_counter));
-        let background = world.exec(|loader: PrefabLoader<SpriteScenePrefab>| loader.load("prefabs/background.ron", RonFormat, &mut self.progress_counter));
-        let level = world.exec(|loader: PrefabLoader<ArkanoidPrefabData>| loader.load("prefabs/level.ron", RonFormat, &mut self.progress_counter));
-        let score = world.exec(|loader: UiLoader| loader.load("ui/score.ron", &mut self.progress_counter));
-        let life = world.exec(|loader: UiLoader| loader.load("ui/life.ron", &mut self.progress_counter));
-
-        world.insert(PrefabHandles {
+        let prefab_handles = world.exec(|(ui_loader, camera_loader, sprite_loader, arkanoid_loader): SystemData| PrefabHandles {
             menu: MenuPrefabHandles {
-                main_menu,
-                pause_menu,
-                game_over_menu,
+                main_menu: ui_loader.load("ui/main_menu.ron", &mut self.progress_counter),
+                pause_menu: ui_loader.load("ui/pause_menu.ron", &mut self.progress_counter),
+                game_over_menu: ui_loader.load("ui/game_over_menu.ron", &mut self.progress_counter),
+                level_complete_menu: ui_loader.load("ui/level_complete_menu.ron", &mut self.progress_counter),
             },
             game: GamePrefabHandles {
-                camera,
-                background,
-                level,
-                score,
-                life,
+                camera: camera_loader.load("prefabs/camera.ron", RonFormat, &mut self.progress_counter),
+                background: sprite_loader.load("prefabs/background.ron", RonFormat, &mut self.progress_counter),
+                level: arkanoid_loader.load("prefabs/level.ron", RonFormat, &mut self.progress_counter),
+                score: ui_loader.load("ui/score.ron", &mut self.progress_counter),
+                life: ui_loader.load("ui/life.ron", &mut self.progress_counter),
             },
         });
+
+        world.insert(prefab_handles);
     }
 
     fn update(&mut self, _data: &mut StateData<GameData>) -> SimpleTrans {

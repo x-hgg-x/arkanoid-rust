@@ -1,0 +1,59 @@
+#![enable(implicit_some)]
+Container(
+    transform: (
+        id: "level_complete_menu",
+        anchor: Middle,
+        pivot: Middle,
+    ),
+    children: [
+        Label(
+            transform: (
+                id: "level_complete",
+                y: 200.0,
+                width: 700.0,
+                height: 65.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "LEVEL COMPLETE",
+                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font_size: 65.0,
+                color: (1.0, 1.0, 1.0, 1.0),
+            ),
+        ),
+        Label(
+            transform: (
+                id: "cursor_main_menu",
+                x: -195.0,
+                y: -25.0,
+                width: 100.0,
+                height: 50.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "\u{25ba}",
+                font: File("fonts/hack.ttf", ("TTF", ())),
+                font_size: 50.0,
+                color: (1.0, 1.0, 1.0, 1.0),
+            ),
+        ),
+        Label(
+            transform: (
+                id: "main_menu",
+                y: -25.0,
+                width: 350.0,
+                height: 50.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "MAIN MENU",
+                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font_size: 50.0,
+                color: (1.0, 1.0, 1.0, 1.0),
+            ),
+        ),
+    ]
+)
