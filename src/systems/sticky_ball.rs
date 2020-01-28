@@ -1,4 +1,4 @@
-use crate::components::{Ball, PlayerPaddle, StickyBall};
+use crate::components::{Ball, Paddle, StickyBall};
 use crate::states::ARENA_WIDTH;
 
 use arkanoid_precompile::bindings::{ActionBinding, ArkanoidBindings};
@@ -21,7 +21,7 @@ impl<'s> System<'s> for StickyBallSystem {
     #[allow(clippy::type_complexity)]
     type SystemData = (
         Entities<'s>,
-        ReadStorage<'s, PlayerPaddle>,
+        ReadStorage<'s, Paddle>,
         WriteStorage<'s, Ball>,
         WriteStorage<'s, StickyBall>,
         WriteStorage<'s, Transform>,

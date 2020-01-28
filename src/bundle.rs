@@ -17,6 +17,7 @@ impl<'a, 'b> SystemBundle<'a, 'b> for ArkanoidBundle {
         builder.add(MoveBallSystem.pausable(CurrentState::Running), "move_ball_system", &["sticky_ball_system"]);
         builder.add(CollisionSystem.pausable(CurrentState::Running), "collision_system", &["paddle_system", "move_ball_system"]);
         builder.add(BlockHealthSystem::new(world).pausable(CurrentState::Running), "block_health_system", &["collision_system"]);
+        builder.add(LifeSystem::new(world).pausable(CurrentState::Running), "life_system", &["collision_system"]);
         Ok(())
     }
 }

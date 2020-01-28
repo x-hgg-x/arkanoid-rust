@@ -12,11 +12,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Component, Deserialize, Serialize, PrefabData)]
 #[prefab(Component)]
 #[serde(deny_unknown_fields)]
-pub struct PlayerPaddle {
+pub struct Paddle {
     pub width: f32,
     pub height: f32,
     pub velocity: f32,
-    pub health: f32,
 }
 
 #[derive(Debug, Clone, Component, Deserialize, Serialize, PrefabData)]
@@ -48,7 +47,7 @@ pub struct Block {
 #[derive(Debug, Clone, Deserialize, Serialize, PrefabData)]
 #[serde(deny_unknown_fields)]
 pub enum ArkanoidElementPrefab {
-    PlayerPaddle(PlayerPaddle),
+    Paddle(Paddle),
     Ball { ball: Ball, sticky: Option<StickyBall> },
     Block(Block),
 }

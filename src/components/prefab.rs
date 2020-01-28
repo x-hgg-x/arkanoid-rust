@@ -10,6 +10,7 @@ use amethyst::{
 pub struct MenuPrefabHandles {
     pub main_menu: Handle<UiPrefab>,
     pub pause_menu: Handle<UiPrefab>,
+    pub game_over_menu: Handle<UiPrefab>,
 }
 
 #[derive(Clone)]
@@ -18,6 +19,7 @@ pub struct GamePrefabHandles {
     pub background: Handle<Prefab<SpriteScenePrefab>>,
     pub level: Handle<Prefab<ArkanoidPrefabData>>,
     pub score: Handle<UiPrefab>,
+    pub life: Handle<UiPrefab>,
 }
 
 #[derive(Clone)]

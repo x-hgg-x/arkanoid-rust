@@ -46,11 +46,10 @@ Prefab(
                         translation: (360.0, 12.0, 0.0),
                     ),
                 ),
-                element: PlayerPaddle((
+                element: Paddle((
                     width: 144.0,
                     height: 24.0,
                     velocity: 500.0,
-                    health: 5.0,
                 ))
             ),
         ),

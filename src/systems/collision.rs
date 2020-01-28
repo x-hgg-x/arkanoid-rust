@@ -1,4 +1,4 @@
-use crate::components::{Ball, Block, PlayerPaddle, StickyBall};
+use crate::components::{Ball, Block, Paddle, StickyBall};
 use crate::states::{ARENA_HEIGHT, ARENA_WIDTH};
 
 use amethyst::{
@@ -19,6 +19,8 @@ pub struct BlockCollisionEvent {
     pub entity: Entity,
 }
 
+pub struct LifeEvent;
+
 #[derive(SystemDesc)]
 pub struct CollisionSystem;
 
@@ -29,12 +31,13 @@ impl<'s> System<'s> for CollisionSystem {
         WriteStorage<'s, Ball>,
         WriteStorage<'s, StickyBall>,
         WriteStorage<'s, Transform>,
-        ReadStorage<'s, PlayerPaddle>,
+        ReadStorage<'s, Paddle>,
         ReadStorage<'s, Block>,
         Write<'s, EventChannel<BlockCollisionEvent>>,
+        Write<'s, EventChannel<LifeEvent>>,
     );
 
-    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks, mut block_collision_event_channel): Self::SystemData) {
+    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks, mut block_collision_event_channel, mut life_event_channel): Self::SystemData) {
         // Get blocks with translation and entity
         let blocks_entities_translations: Vec<_> = (&blocks, &entities, &transforms)
             .join()
@@ -69,6 +72,7 @@ impl<'s> System<'s> for CollisionSystem {
 
                     sticky_balls.insert(entity, sticky).expect("Unable to add entity to storage.");
                     ball_transform.set_translation_xyz(paddle_x, paddle.height + ball.radius, 0.0);
+                    life_event_channel.single_write(LifeEvent);
                 }
 
                 // Bounce at the paddle

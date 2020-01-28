@@ -19,14 +19,26 @@ impl SimpleState for LoadingState {
 
         let main_menu = world.exec(|loader: UiLoader| loader.load("ui/main_menu.ron", &mut self.progress_counter));
         let pause_menu = world.exec(|loader: UiLoader| loader.load("ui/pause_menu.ron", &mut self.progress_counter));
+        let game_over_menu = world.exec(|loader: UiLoader| loader.load("ui/game_over_menu.ron", &mut self.progress_counter));
         let camera = world.exec(|loader: PrefabLoader<CameraPrefabData>| loader.load("prefabs/camera.ron", RonFormat, &mut self.progress_counter));
         let background = world.exec(|loader: PrefabLoader<SpriteScenePrefab>| loader.load("prefabs/background.ron", RonFormat, &mut self.progress_counter));
         let level = world.exec(|loader: PrefabLoader<ArkanoidPrefabData>| loader.load("prefabs/level.ron", RonFormat, &mut self.progress_counter));
         let score = world.exec(|loader: UiLoader| loader.load("ui/score.ron", &mut self.progress_counter));
+        let life = world.exec(|loader: UiLoader| loader.load("ui/life.ron", &mut self.progress_counter));
 
         world.insert(PrefabHandles {
-            menu: MenuPrefabHandles { main_menu, pause_menu },
-            game: GamePrefabHandles { camera, background, level, score },
+            menu: MenuPrefabHandles {
+                main_menu,
+                pause_menu,
+                game_over_menu,
+            },
+            game: GamePrefabHandles {
+                camera,
+                background,
+                level,
+                score,
+                life,
+            },
         });
     }
 

@@ -1,22 +1,22 @@
 #![enable(implicit_some)]
 Container(
     transform: (
-        id: "main_menu",
+        id: "game_over_menu",
         anchor: Middle,
         pivot: Middle,
     ),
     children: [
         Label(
             transform: (
-                id: "title",
+                id: "game_over",
                 y: 200.0,
-                width: 600.0,
+                width: 700.0,
                 height: 150.0,
                 anchor: Middle,
                 pivot: Middle,
             ),
             text: (
-                text: "Arkanoid",
+                text: "GAME OVER",
                 font: File("fonts/joystix.ttf", ("TTF", ())),
                 font_size: 100.0,
                 color: (1.0, 1.0, 1.0, 1.0),
@@ -24,9 +24,9 @@ Container(
         ),
         Label(
             transform: (
-                id: "cursor_new_game",
-                x: -180.0,
-                y: 0.0,
+                id: "cursor_restart",
+                x: -160.0,
+                y: 50.0,
                 width: 100.0,
                 height: 50.0,
                 anchor: Middle,
@@ -41,9 +41,9 @@ Container(
         ),
         Label(
             transform: (
-                id: "cursor_exit",
-                x: -110.0,
-                y: -100.0,
+                id: "cursor_main_menu",
+                x: -195.0,
+                y: -50.0,
                 width: 100.0,
                 height: 50.0,
                 anchor: Middle,
@@ -58,15 +58,48 @@ Container(
         ),
         Label(
             transform: (
-                id: "new_game",
-                y: 0.0,
+                id: "cursor_exit",
+                x: -110.0,
+                y: -150.0,
+                width: 100.0,
+                height: 50.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "\u{25ba}",
+                font: File("fonts/hack.ttf", ("TTF", ())),
+                font_size: 50.0,
+                color: (1.0, 1.0, 1.0, 0.0),
+            ),
+        ),
+        Label(
+            transform: (
+                id: "restart",
+                y: 50.0,
                 width: 300.0,
                 height: 50.0,
                 anchor: Middle,
                 pivot: Middle,
             ),
             text: (
-                text: "NEW GAME",
+                text: "RESTART",
+                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font_size: 50.0,
+                color: (1.0, 1.0, 1.0, 1.0),
+            ),
+        ),
+        Label(
+            transform: (
+                id: "main_menu",
+                y: -50.0,
+                width: 350.0,
+                height: 50.0,
+                anchor: Middle,
+                pivot: Middle,
+            ),
+            text: (
+                text: "MAIN MENU",
                 font: File("fonts/joystix.ttf", ("TTF", ())),
                 font_size: 50.0,
                 color: (1.0, 1.0, 1.0, 1.0),
@@ -75,7 +108,7 @@ Container(
         Label(
             transform: (
                 id: "exit",
-                y: -100.0,
+                y: -150.0,
                 width: 150.0,
                 height: 50.0,
                 anchor: Middle,

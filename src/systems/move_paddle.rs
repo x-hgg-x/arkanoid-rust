@@ -1,4 +1,4 @@
-use crate::components::PlayerPaddle;
+use crate::components::Paddle;
 use crate::states::ARENA_WIDTH;
 
 use arkanoid_precompile::bindings::{ArkanoidBindings, AxisBinding};
@@ -14,7 +14,7 @@ use amethyst::{
 pub struct MovePaddleSystem;
 
 impl<'s> System<'s> for MovePaddleSystem {
-    type SystemData = (ReadStorage<'s, PlayerPaddle>, WriteStorage<'s, Transform>, Read<'s, Time>, Read<'s, InputHandler<ArkanoidBindings>>);
+    type SystemData = (ReadStorage<'s, Paddle>, WriteStorage<'s, Transform>, Read<'s, Time>, Read<'s, InputHandler<ArkanoidBindings>>);
 
     fn run(&mut self, (paddles, mut transforms, time, input): Self::SystemData) {
         for (paddle, paddle_transform) in (&paddles, &mut transforms).join() {
