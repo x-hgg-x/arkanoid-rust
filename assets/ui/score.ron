@@ -10,7 +10,7 @@ Label(
         pivot: TopLeft,
     ),
     text: (
-        text: "SCORE: 00000",
+        text: "SCORE: 0",
         font: File("fonts/joystix.ttf", ("TTF", ())),
         font_size: 30.0,
         color: (1.0, 1.0, 1.0, 1.0),

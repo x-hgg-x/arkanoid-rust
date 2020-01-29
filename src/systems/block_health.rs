@@ -1,6 +1,6 @@
 use crate::components::Block;
 use crate::resources::{Game, GameEvent, NUM_LIFES};
-use crate::systems::BlockCollisionEvent;
+use crate::systems::{BlockCollisionEvent, ScoreEvent};
 
 use amethyst::{
     core::SystemDesc,
@@ -33,9 +33,10 @@ impl<'s> System<'s> for BlockHealthSystem {
         WriteStorage<'s, Block>,
         WriteStorage<'s, SpriteRender>,
         Read<'s, EventChannel<BlockCollisionEvent>>,
+        Write<'s, EventChannel<ScoreEvent>>,
     );
 
-    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel): Self::SystemData) {
+    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel, mut score_event_channel): Self::SystemData) {
         for BlockCollisionEvent { entity } in block_collision_event_channel.read(&mut self.reader) {
             if let (Some(block), Some(sprite)) = (blocks.get_mut(*entity), sprites.get_mut(*entity)) {
                 block.health -= 1.0;
@@ -43,14 +44,13 @@ impl<'s> System<'s> for BlockHealthSystem {
                     sprite.sprite_number += 6;
                 } else {
                     entities.delete(*entity).expect("Failed to delete entity.");
-                    game.score += 1;
+                    score_event_channel.single_write(ScoreEvent { score: 50 });
                 }
             }
         }
 
-        let is_start_game = game.lifes == NUM_LIFES && game.score == 0;
-
-        if (&blocks).join().next().is_none() && !is_start_game {
+        let game_beginning = game.lifes == NUM_LIFES && game.score == 0;
+        if (&blocks).join().next().is_none() && !game_beginning {
             game.event = Some(GameEvent::LevelComplete);
         }
     }

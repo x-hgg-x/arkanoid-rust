@@ -1,16 +1,29 @@
 use crate::components::PrefabHandles;
-use crate::states::{GameplayState, MainMenuState, Menu};
+use crate::states::{GameplayState, MainMenuState, Menu, SCORE_TEXT_ID};
 
 use amethyst::{
-    ecs::Entity,
+    ecs::{Entity, WriteStorage},
     input::{is_key_down, VirtualKeyCode},
     prelude::*,
+    ui::{UiFinder, UiText},
 };
 
-#[derive(Default)]
 pub struct GameOverState {
     game_over_menu: Option<Entity>,
     selection: i32,
+    score: i32,
+    score_updated: bool,
+}
+
+impl GameOverState {
+    pub fn new(score: i32) -> Self {
+        Self {
+            game_over_menu: None,
+            selection: 0,
+            score,
+            score_updated: false,
+        }
+    }
 }
 
 impl Menu for GameOverState {
@@ -39,6 +52,18 @@ impl SimpleState for GameOverState {
         if let Some(entity) = self.game_over_menu {
             data.world.delete_entity(entity).expect("Failed to delete entity.");
         }
+    }
+
+    fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans {
+        if !self.score_updated {
+            data.world.exec(|(ui_finder, mut ui_texts): (UiFinder, WriteStorage<UiText>)| {
+                if let Some(ui_text) = ui_finder.find(SCORE_TEXT_ID).and_then(|entity| ui_texts.get_mut(entity)) {
+                    ui_text.text = format!("SCORE: {}", self.score);
+                    self.score_updated = true;
+                }
+            });
+        }
+        Trans::None
     }
 
     fn handle_event(&mut self, data: StateData<GameData>, event: StateEvent) -> SimpleTrans {

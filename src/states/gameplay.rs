@@ -12,9 +12,10 @@ pub const ARENA_WIDTH: f32 = 720.0;
 pub const ARENA_HEIGHT: f32 = 600.0;
 
 pub const LIFE_TEXT_ID: &str = "life";
+pub const SCORE_TEXT_ID: &str = "score";
 
 #[derive(Default)]
-pub struct GameplayState {}
+pub struct GameplayState;
 
 impl SimpleState for GameplayState {
     fn on_start(&mut self, data: StateData<GameData>) {
@@ -49,9 +50,11 @@ impl SimpleState for GameplayState {
     }
 
     fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans {
-        match data.world.write_resource::<Game>().event.take() {
-            Some(GameEvent::GameOver) => Trans::Switch(Box::new(GameOverState::default())),
-            Some(GameEvent::LevelComplete) => Trans::Switch(Box::new(LevelCompleteState::default())),
+        let mut game = data.world.write_resource::<Game>();
+
+        match game.event.take() {
+            Some(GameEvent::GameOver) => Trans::Switch(Box::new(GameOverState::new(game.score))),
+            Some(GameEvent::LevelComplete) => Trans::Switch(Box::new(LevelCompleteState::new(game.score))),
             _ => Trans::None,
         }
     }

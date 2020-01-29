@@ -21,6 +21,10 @@ pub struct BlockCollisionEvent {
 
 pub struct LifeEvent;
 
+pub struct ScoreEvent {
+    pub score: i32,
+}
+
 #[derive(SystemDesc)]
 pub struct CollisionSystem;
 
@@ -35,9 +39,10 @@ impl<'s> System<'s> for CollisionSystem {
         ReadStorage<'s, Block>,
         Write<'s, EventChannel<BlockCollisionEvent>>,
         Write<'s, EventChannel<LifeEvent>>,
+        Write<'s, EventChannel<ScoreEvent>>,
     );
 
-    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks, mut block_collision_event_channel, mut life_event_channel): Self::SystemData) {
+    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks, mut block_collision_event_channel, mut life_event_channel, mut score_event_channel): Self::SystemData) {
         // Get blocks with translation and entity
         let blocks_entities_translations: Vec<_> = (&blocks, &entities, &transforms)
             .join()
@@ -73,6 +78,7 @@ impl<'s> System<'s> for CollisionSystem {
                     sticky_balls.insert(entity, sticky).expect("Unable to add entity to storage.");
                     ball_transform.set_translation_xyz(paddle_x, paddle.height + ball.radius, 0.0);
                     life_event_channel.single_write(LifeEvent);
+                    score_event_channel.single_write(ScoreEvent { score: -1000 });
                 }
 
                 // Bounce at the paddle
@@ -98,6 +104,7 @@ impl<'s> System<'s> for CollisionSystem {
                         let angle = (-ball.direction.perp(&contact.normal)).atan2(-ball.direction.dot(&contact.normal));
                         ball.direction = -(Rotation2::new(2.0 * angle) * ball.direction).normalize();
                         block_collision_event_channel.single_write(BlockCollisionEvent { entity: *entity });
+                        score_event_channel.single_write(ScoreEvent { score: 50 });
                         break;
                     }
                 }

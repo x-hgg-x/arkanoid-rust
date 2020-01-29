@@ -5,7 +5,7 @@ pub enum GameEvent {
 
 pub struct Game {
     pub lifes: i32,
-    pub score: u32,
+    pub score: i32,
     pub event: Option<GameEvent>,
 }
 
