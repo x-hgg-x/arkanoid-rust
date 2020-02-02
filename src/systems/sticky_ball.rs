@@ -1,12 +1,12 @@
 use crate::components::{Ball, Paddle, StickyBall};
 use crate::states::ARENA_WIDTH;
 
-use arkanoid_precompile::bindings::{ActionBinding, ArkanoidBindings};
+use precompile::bindings::{ActionBinding, ArkanoidBindings};
 
 use amethyst::{
-    core::{SystemDesc, Time, Transform},
+    core::{Time, Transform},
     derive::SystemDesc,
-    ecs::{Entities, Join, Read, ReadStorage, System, SystemData, World, WriteStorage},
+    ecs::{Entities, Join, Read, ReadStorage, System, SystemData, WriteStorage},
     input::InputHandler,
 };
 

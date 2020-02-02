@@ -3,7 +3,6 @@ use crate::resources::{Game, GameEvent, NUM_LIFES};
 use crate::systems::{BlockCollisionEvent, ScoreEvent};
 
 use amethyst::{
-    core::SystemDesc,
     derive::SystemDesc,
     ecs::{Entities, Join, Read, System, SystemData, World, Write, WriteStorage},
     prelude::*,

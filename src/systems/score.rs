@@ -3,7 +3,6 @@ use crate::states::SCORE_TEXT_ID;
 use crate::systems::ScoreEvent;
 
 use amethyst::{
-    core::SystemDesc,
     derive::SystemDesc,
     ecs::{Read, System, SystemData, World, Write, WriteStorage},
     prelude::*,

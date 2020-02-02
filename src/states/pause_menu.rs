@@ -5,7 +5,6 @@ use amethyst::{
     ecs::Entity,
     input::{is_key_down, VirtualKeyCode},
     prelude::*,
-    shrev::EventChannel,
 };
 
 #[derive(Default)]
@@ -55,9 +54,7 @@ impl SimpleState for PausedState {
                     }
                     // Main Menu
                     1 => {
-                        let mut channel = data.world.write_resource::<EventChannel<TransEvent<GameData, StateEvent>>>();
-                        channel.single_write(Box::new(|| Trans::Pop));
-                        channel.single_write(Box::new(|| Trans::Switch(Box::new(MainMenuState::default()))));
+                        return Trans::Replace(Box::new(MainMenuState::default()));
                     }
                     // Exit
                     2 => {

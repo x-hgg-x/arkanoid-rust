@@ -4,10 +4,10 @@ use crate::states::{ARENA_HEIGHT, ARENA_WIDTH};
 use amethyst::{
     core::{
         math::{self, Isometry2, Rotation2, Vector2},
-        SystemDesc, Transform,
+        Transform,
     },
     derive::SystemDesc,
-    ecs::{Entities, Entity, Join, ReadStorage, System, SystemData, World, Write, WriteStorage},
+    ecs::{Entities, Entity, Join, ReadStorage, System, SystemData, Write, WriteStorage},
     shrev::EventChannel,
 };
 

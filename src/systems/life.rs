@@ -3,7 +3,6 @@ use crate::states::LIFE_TEXT_ID;
 use crate::systems::LifeEvent;
 
 use amethyst::{
-    core::SystemDesc,
     derive::SystemDesc,
     ecs::{Read, System, SystemData, World, Write, WriteStorage},
     prelude::*,

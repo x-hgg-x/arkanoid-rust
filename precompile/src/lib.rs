@@ -25,7 +25,7 @@ pub struct PrecompiledBundle {
 impl<'a, 'b> SystemBundle<'a, 'b> for PrecompiledBundle {
     fn build(self, world: &mut World, builder: &mut DispatcherBuilder<'a, 'b>) -> Result<(), Error> {
         RenderingBundle::<DefaultBackend>::new()
-            .with_plugin(RenderToWindow::from_config_path(self.display_config_path).with_clear([0.0, 0.0, 0.0, 1.0]))
+            .with_plugin(RenderToWindow::from_config_path(self.display_config_path)?.with_clear([0.0, 0.0, 0.0, 1.0]))
             .with_plugin(RenderFlat2D::default())
             .with_plugin(RenderUi::default())
             .build(world, builder)?;
