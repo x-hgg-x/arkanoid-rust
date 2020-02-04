@@ -50,7 +50,6 @@ Prefab(
                 element: Paddle((
                     width: 144.0,
                     height: 24.0,
-                    velocity: 500.0,
                 ))
             ),
         ),

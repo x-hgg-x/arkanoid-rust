@@ -15,7 +15,6 @@ use serde::{Deserialize, Serialize};
 pub struct Paddle {
     pub width: f32,
     pub height: f32,
-    pub velocity: f32,
 }
 
 #[derive(Debug, Clone, Component, Deserialize, Serialize, PrefabData)]

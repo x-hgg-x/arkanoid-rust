@@ -64,6 +64,7 @@ Container(
                 height: 50.0,
                 anchor: Middle,
                 pivot: Middle,
+                mouse_reactive: true,
             ),
             text: (
                 text: "NEW GAME",
@@ -80,6 +81,7 @@ Container(
                 height: 50.0,
                 anchor: Middle,
                 pivot: Middle,
+                mouse_reactive: true,
             ),
             text: (
                 text: "EXIT",

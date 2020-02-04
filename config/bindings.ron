@@ -1,8 +1,9 @@
 (
     axes: {
-        Paddle: Emulated(pos: Key(Right), neg: Key(Left)),
+        Paddle: Mouse(axis: X, over_extendable: true, radius: 1),
+        // Paddle: Emulated(pos: Key(Right), neg: Key(Left)),
     },
     actions: {
-        ReleaseBall: [[Key(W)], [Key(Z)]],
+        ReleaseBall: [[Mouse(Left)], [Key(W)], [Key(Z)]],
     },
 )

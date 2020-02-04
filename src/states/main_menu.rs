@@ -22,6 +22,20 @@ impl Menu for MainMenuState {
         self.selection = selection;
     }
 
+    fn confirm_selection(&self) -> SimpleTrans {
+        match self.selection {
+            // New game
+            0 => Trans::Switch(Box::new(GameplayState::default())),
+            // Exit
+            1 => Trans::Quit,
+            _ => unreachable!(),
+        }
+    }
+
+    fn get_menu_ids(&self) -> &[&str] {
+        &["new_game", "exit"]
+    }
+
     fn get_cursor_menu_ids(&self) -> &[&str] {
         &["cursor_new_game", "cursor_exit"]
     }
@@ -42,25 +56,11 @@ impl SimpleState for MainMenuState {
     }
 
     fn handle_event(&mut self, data: StateData<GameData>, event: StateEvent) -> SimpleTrans {
-        if let StateEvent::Window(event) = event {
+        if let StateEvent::Window(event) = &event {
             if is_key_down(&event, VirtualKeyCode::Escape) || is_key_down(&event, VirtualKeyCode::Q) {
                 return Trans::Quit;
             }
-            if is_key_down(&event, VirtualKeyCode::Return) || is_key_down(&event, VirtualKeyCode::Space) {
-                match self.selection {
-                    // New game
-                    0 => {
-                        return Trans::Switch(Box::new(GameplayState::default()));
-                    }
-                    // Exit
-                    1 => {
-                        return Trans::Quit;
-                    }
-                    _ => unreachable!(),
-                }
-            }
-            self.change_menu(data.world, &event);
         }
-        Trans::None
+        self.update_menu(data.world, &event)
     }
 }

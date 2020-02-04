@@ -3,7 +3,6 @@ use crate::states::{MainMenuState, Menu, SCORE_TEXT_ID};
 
 use amethyst::{
     ecs::{Entity, WriteStorage},
-    input::{is_key_down, VirtualKeyCode},
     prelude::*,
     ui::{UiFinder, UiText},
 };
@@ -33,6 +32,18 @@ impl Menu for LevelCompleteState {
 
     fn set_selection(&mut self, selection: i32) {
         self.selection = selection;
+    }
+
+    fn confirm_selection(&self) -> SimpleTrans {
+        match self.selection {
+            // Main Menu
+            0 => Trans::Switch(Box::new(MainMenuState::default())),
+            _ => unreachable!(),
+        }
+    }
+
+    fn get_menu_ids(&self) -> &[&str] {
+        &["main_menu"]
     }
 
     fn get_cursor_menu_ids(&self) -> &[&str] {
@@ -67,18 +78,6 @@ impl SimpleState for LevelCompleteState {
     }
 
     fn handle_event(&mut self, data: StateData<GameData>, event: StateEvent) -> SimpleTrans {
-        if let StateEvent::Window(event) = event {
-            if is_key_down(&event, VirtualKeyCode::Return) || is_key_down(&event, VirtualKeyCode::Space) {
-                match self.selection {
-                    // Main Menu
-                    0 => {
-                        return Trans::Switch(Box::new(MainMenuState::default()));
-                    }
-                    _ => unreachable!(),
-                }
-            }
-            self.change_menu(data.world, &event);
-        }
-        Trans::None
+        self.update_menu(data.world, &event)
     }
 }
