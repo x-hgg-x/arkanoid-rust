@@ -4,7 +4,7 @@ use crate::systems::LifeEvent;
 
 use amethyst::{
     derive::SystemDesc,
-    ecs::{Read, System, SystemData, World, Write, WriteStorage},
+    ecs::{Read, System, SystemData as _, World, Write, WriteStorage},
     prelude::*,
     shrev::{EventChannel, ReaderId},
     ui::{UiFinder, UiText},
@@ -24,10 +24,12 @@ impl LifeSystem {
     }
 }
 
-impl<'s> System<'s> for LifeSystem {
-    type SystemData = (Write<'s, Game>, WriteStorage<'s, UiText>, UiFinder<'s>, Read<'s, EventChannel<LifeEvent>>);
+type SystemData<'s> = (Write<'s, Game>, WriteStorage<'s, UiText>, UiFinder<'s>, Read<'s, EventChannel<LifeEvent>>);
 
-    fn run(&mut self, (mut game, mut ui_texts, ui_finder, life_event_channel): Self::SystemData) {
+impl<'s> System<'s> for LifeSystem {
+    type SystemData = SystemData<'s>;
+
+    fn run(&mut self, (mut game, mut ui_texts, ui_finder, life_event_channel): SystemData) {
         for _event in life_event_channel.read(&mut self.reader) {
             game.lifes -= 1;
 

@@ -4,7 +4,7 @@ use crate::systems::{BlockCollisionEvent, ScoreEvent};
 
 use amethyst::{
     derive::SystemDesc,
-    ecs::{Entities, Join, Read, System, SystemData, World, Write, WriteStorage},
+    ecs::{Entities, Join, Read, System, SystemData as _, World, Write, WriteStorage},
     prelude::*,
     renderer::SpriteRender,
     shrev::{EventChannel, ReaderId},
@@ -24,18 +24,19 @@ impl BlockHealthSystem {
     }
 }
 
-impl<'s> System<'s> for BlockHealthSystem {
-    #[allow(clippy::type_complexity)]
-    type SystemData = (
-        Write<'s, Game>,
-        Entities<'s>,
-        WriteStorage<'s, Block>,
-        WriteStorage<'s, SpriteRender>,
-        Read<'s, EventChannel<BlockCollisionEvent>>,
-        Write<'s, EventChannel<ScoreEvent>>,
-    );
+type SystemData<'s> = (
+    Write<'s, Game>,
+    Entities<'s>,
+    WriteStorage<'s, Block>,
+    WriteStorage<'s, SpriteRender>,
+    Read<'s, EventChannel<BlockCollisionEvent>>,
+    Write<'s, EventChannel<ScoreEvent>>,
+);
 
-    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel, mut score_event_channel): Self::SystemData) {
+impl<'s> System<'s> for BlockHealthSystem {
+    type SystemData = SystemData<'s>;
+
+    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel, mut score_event_channel): SystemData) {
         for BlockCollisionEvent { entity } in block_collision_event_channel.read(&mut self.reader) {
             if let (Some(block), Some(sprite)) = (blocks.get_mut(*entity), sprites.get_mut(*entity)) {
                 block.health -= 1.0;

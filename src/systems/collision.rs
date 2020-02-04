@@ -3,11 +3,11 @@ use crate::states::{ARENA_HEIGHT, ARENA_WIDTH};
 
 use amethyst::{
     core::{
-        math::{self, Isometry2, Rotation2, Vector2},
+        math::{self, Isometry2, Rotation2, Vector2, Vector3},
         Transform,
     },
     derive::SystemDesc,
-    ecs::{Entities, Entity, Join, ReadStorage, System, SystemData, Write, WriteStorage},
+    ecs::{Entities, Entity, Join, ReadStorage, System, SystemData as _, Write, WriteStorage},
     shrev::EventChannel,
 };
 
@@ -28,32 +28,37 @@ pub struct ScoreEvent {
 #[derive(SystemDesc)]
 pub struct CollisionSystem;
 
-impl<'s> System<'s> for CollisionSystem {
-    #[allow(clippy::type_complexity)]
-    type SystemData = (
-        Entities<'s>,
-        WriteStorage<'s, Ball>,
-        WriteStorage<'s, StickyBall>,
-        WriteStorage<'s, Transform>,
-        ReadStorage<'s, Paddle>,
-        ReadStorage<'s, Block>,
-        Write<'s, EventChannel<BlockCollisionEvent>>,
-        Write<'s, EventChannel<LifeEvent>>,
-        Write<'s, EventChannel<ScoreEvent>>,
-    );
+type SystemData<'s> = (
+    Entities<'s>,
+    WriteStorage<'s, Ball>,
+    WriteStorage<'s, StickyBall>,
+    WriteStorage<'s, Transform>,
+    ReadStorage<'s, Paddle>,
+    ReadStorage<'s, Block>,
+    Write<'s, EventChannel<BlockCollisionEvent>>,
+    Write<'s, EventChannel<LifeEvent>>,
+    Write<'s, EventChannel<ScoreEvent>>,
+);
 
-    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks, mut block_collision_event_channel, mut life_event_channel, mut score_event_channel): Self::SystemData) {
+impl<'s> System<'s> for CollisionSystem {
+    type SystemData = SystemData<'s>;
+
+    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks, mut block_collision_event_channel, mut life_event_channel, mut score_event_channel): SystemData) {
         // Get blocks with translation and entity
         let blocks_entities_translations: Vec<_> = (&blocks, &entities, &transforms)
             .join()
             .map(|(block, entity, block_transform)| (block, entity, *block_transform.translation()))
             .collect();
 
-        if let Some((paddle, paddle_transform)) = (&paddles, &transforms).join().next() {
+        if let Some(val) = (&paddles, &transforms).join().next() {
+            let (paddle, paddle_transform): (&Paddle, &Transform) = val;
+
             let paddle_x = paddle_transform.translation().x;
             let paddle_y = paddle_transform.translation().y;
 
-            for (entity, ball, ball_transform) in (&entities, &mut balls, &mut transforms).join() {
+            for val in (&entities, &mut balls, &mut transforms).join() {
+                let (entity, ball, ball_transform): (Entity, &mut Ball, &mut Transform) = val;
+
                 let ball_x = ball_transform.translation().x;
                 let ball_y = ball_transform.translation().y;
 
@@ -95,7 +100,8 @@ impl<'s> System<'s> for CollisionSystem {
                 }
 
                 // Bounce at the blocks
-                for (block, entity, block_translation) in &blocks_entities_translations {
+                for val in &blocks_entities_translations {
+                    let (block, entity, block_translation): &(&Block, Entity, Vector3<f32>) = val;
                     let block_shape = Cuboid::new(Vector2::new(block.width / 2.0, block.height / 2.0));
                     let block_pos = Isometry2::new(Vector2::new(block_translation.x, block_translation.y), math::zero());
 

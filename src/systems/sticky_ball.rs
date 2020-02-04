@@ -6,7 +6,7 @@ use precompile::bindings::{ActionBinding, ArkanoidBindings};
 use amethyst::{
     core::{Time, Transform},
     derive::SystemDesc,
-    ecs::{Entities, Join, Read, ReadStorage, System, SystemData, WriteStorage},
+    ecs::{Entities, Join, Read, ReadStorage, System, SystemData as _, WriteStorage},
     input::InputHandler,
 };
 
@@ -17,21 +17,26 @@ pub struct StickyBallSystem {
     time: f32,
 }
 
-impl<'s> System<'s> for StickyBallSystem {
-    #[allow(clippy::type_complexity)]
-    type SystemData = (
-        Entities<'s>,
-        ReadStorage<'s, Paddle>,
-        WriteStorage<'s, Ball>,
-        WriteStorage<'s, StickyBall>,
-        WriteStorage<'s, Transform>,
-        Read<'s, Time>,
-        Read<'s, InputHandler<ArkanoidBindings>>,
-    );
+type SystemData<'s> = (
+    Entities<'s>,
+    ReadStorage<'s, Paddle>,
+    WriteStorage<'s, Ball>,
+    WriteStorage<'s, StickyBall>,
+    WriteStorage<'s, Transform>,
+    Read<'s, Time>,
+    Read<'s, InputHandler<ArkanoidBindings>>,
+);
 
-    fn run(&mut self, (entities, paddles, mut balls, mut sticky_balls, mut transforms, time, input): Self::SystemData) {
-        if let Some((paddle_width, paddle_x)) = (&paddles, &transforms).join().next().map(|(paddle, paddle_transform)| (paddle.width, paddle_transform.translation().x)) {
-            for (ball, sticky_ball, ball_transform) in (&mut balls, &sticky_balls, &mut transforms).join() {
+impl<'s> System<'s> for StickyBallSystem {
+    type SystemData = SystemData<'s>;
+
+    fn run(&mut self, (entities, paddles, mut balls, mut sticky_balls, mut transforms, time, input): SystemData) {
+        if let Some(val) = (&paddles, &transforms).join().next().map(|(paddle, paddle_transform)| (paddle.width, paddle_transform.translation().x)) {
+            let (paddle_width, paddle_x): (f32, f32) = val;
+
+            for val in (&mut balls, &sticky_balls, &mut transforms).join() {
+                let (ball, sticky_ball, ball_transform): (&mut Ball, &StickyBall, &mut Transform) = val;
+
                 // Follow paddle
                 ball_transform.set_translation_x(paddle_x.min(ARENA_WIDTH - ball.radius / 2.0).max(ball.radius / 2.0));
 
