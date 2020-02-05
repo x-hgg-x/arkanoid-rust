@@ -4,13 +4,14 @@ use crate::states::ARENA_WIDTH;
 use precompile::bindings::{ActionBinding, ArkanoidBindings};
 
 use amethyst::{
-    core::{Time, Transform},
+    core::{
+        math::RealField,
+        {Time, Transform},
+    },
     derive::SystemDesc,
     ecs::{Entities, Join, Read, ReadStorage, System, SystemData as _, WriteStorage},
     input::InputHandler,
 };
-
-use std::f32::consts::PI;
 
 #[derive(SystemDesc, Default)]
 pub struct StickyBallSystem {
@@ -41,10 +42,10 @@ impl<'s> System<'s> for StickyBallSystem {
                 ball_transform.set_translation_x(paddle_x.min(ARENA_WIDTH - ball.radius / 2.0).max(ball.radius / 2.0));
 
                 // Add oscillation
-                ball_transform.prepend_translation_x(sticky_ball.width_extent / 2.0 * (2.0 * PI * self.time / sticky_ball.period).sin());
+                ball_transform.prepend_translation_x(sticky_ball.width_extent / 2.0 * (2.0 * f32::pi() * self.time / sticky_ball.period).sin());
 
                 // Set ball direction
-                let angle = ((paddle_x - ball_transform.translation().x) / paddle_width * PI).min(PI / 3.0).max(-PI / 3.0);
+                let angle = ((paddle_x - ball_transform.translation().x) / paddle_width * f32::pi()).min(f32::pi() / 3.0).max(-f32::pi() / 3.0);
                 ball.direction.x = -angle.sin();
                 ball.direction.y = angle.cos();
             }

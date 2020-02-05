@@ -3,7 +3,7 @@ use crate::states::{ARENA_HEIGHT, ARENA_WIDTH};
 
 use amethyst::{
     core::{
-        math::{Isometry2, Rotation2, Vector2},
+        math::{Isometry2, RealField, Rotation2, Vector2},
         Transform,
     },
     derive::SystemDesc,
@@ -15,8 +15,6 @@ use ncollide2d::{
     query,
     shape::{Ball as BallShape, Compound, Cuboid, ShapeHandle},
 };
-
-use std::f32::consts::PI;
 
 pub struct BlockCollisionEvent {
     pub entity: Entity,
@@ -107,7 +105,7 @@ impl<'s> System<'s> for CollisionSystem {
                 let paddle_pos = Isometry2::new(Vector2::new(paddle_x, paddle_y), 0.0);
 
                 if query::contact(&paddle_pos, &paddle_shape, &ball_pos, &ball_shape, 0.0).is_some() {
-                    let angle = ((paddle_x - ball_transform.translation().x) / paddle.width * PI).min(PI / 3.0).max(-PI / 3.0);
+                    let angle = ((paddle_x - ball_transform.translation().x) / paddle.width * f32::pi()).min(f32::pi() / 3.0).max(-f32::pi() / 3.0);
                     ball.direction.x = -angle.sin();
                     ball.direction.y = angle.cos();
                 }
