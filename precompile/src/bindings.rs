@@ -10,6 +10,7 @@ pub enum AxisBinding {
 #[derive(Clone, Debug, Hash, PartialEq, Eq, Serialize, Deserialize, Display)]
 pub enum ActionBinding {
     ReleaseBall,
+    BallAttraction,
 }
 
 #[derive(Debug)]

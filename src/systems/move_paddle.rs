@@ -6,28 +6,35 @@ use precompile::bindings::{ArkanoidBindings, AxisBinding};
 use amethyst::{
     core::{Time, Transform},
     derive::SystemDesc,
-    ecs::{Join, Read, ReadStorage, System, SystemData as _, WriteStorage},
+    ecs::{Join, Read, ReadExpect, ReadStorage, System, SystemData as _, WriteStorage},
     input::{
         Axis::{Emulated, Mouse},
         InputHandler,
     },
+    window::ScreenDimensions,
 };
 
 #[derive(SystemDesc)]
 pub struct MovePaddleSystem;
 
-type SystemData<'s> = (ReadStorage<'s, Paddle>, WriteStorage<'s, Transform>, Read<'s, Time>, Read<'s, InputHandler<ArkanoidBindings>>);
+type SystemData<'s> = (
+    ReadStorage<'s, Paddle>,
+    WriteStorage<'s, Transform>,
+    Read<'s, Time>,
+    ReadExpect<'s, ScreenDimensions>,
+    Read<'s, InputHandler<ArkanoidBindings>>,
+);
 
 impl<'s> System<'s> for MovePaddleSystem {
     type SystemData = SystemData<'s>;
 
-    fn run(&mut self, (paddles, mut transforms, time, input): SystemData) {
+    fn run(&mut self, (paddles, mut transforms, time, dimensions, input): SystemData) {
         for val in (&paddles, &mut transforms).join() {
             let (paddle, paddle_transform): (&Paddle, &mut Transform) = val;
             let old_x = paddle_transform.translation().x;
 
             let new_x = match input.bindings.axis(&AxisBinding::Paddle) {
-                Some(Mouse { .. }) => input.mouse_position().map(|pos| pos.0).unwrap_or(old_x),
+                Some(Mouse { .. }) => input.mouse_position().map(|pos| pos.0 / dimensions.width() * ARENA_WIDTH).unwrap_or(old_x),
                 Some(Emulated { .. }) => old_x + input.axis_value(&AxisBinding::Paddle).map(|movement| ARENA_WIDTH * time.delta_seconds() * movement).unwrap_or(0.0),
                 _ => old_x,
             };

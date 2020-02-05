@@ -1,6 +1,6 @@
 use amethyst::{
     assets::{PrefabData, ProgressCounter},
-    core::math::Vector2,
+    core::math::{Unit, Vector2},
     derive::PrefabData,
     ecs::{Component, DenseVecStorage, Entity, WriteStorage},
     renderer::sprite::prefab::SpriteScenePrefab,
@@ -23,7 +23,8 @@ pub struct Paddle {
 pub struct Ball {
     pub radius: f32,
     pub velocity: f32,
-    pub direction: Vector2<f32>,
+    pub velocity_mult: f32,
+    pub direction: Unit<Vector2<f32>>,
 }
 
 #[derive(Debug, Clone, Component, Deserialize, Serialize, PrefabData)]

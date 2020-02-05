@@ -5,5 +5,6 @@
     },
     actions: {
         ReleaseBall: [[Mouse(Left)], [Key(W)], [Key(Z)]],
+        BallAttraction: [[Mouse(Right)], [Key(X)]],
     },
 )

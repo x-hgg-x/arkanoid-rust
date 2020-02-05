@@ -3,11 +3,11 @@ use crate::states::{ARENA_HEIGHT, ARENA_WIDTH};
 
 use amethyst::{
     core::{
-        math::{Isometry2, RealField, Rotation2, Vector2},
-        Transform,
+        math::{Isometry2, RealField, Rotation2, Unit, Vector2, Vector3},
+        Time, Transform,
     },
     derive::SystemDesc,
-    ecs::{Entities, Entity, Join, ReadStorage, System, SystemData as _, Write, WriteStorage},
+    ecs::{Entities, Entity, Join, Read, ReadStorage, System, SystemData as _, Write, WriteStorage},
     shrev::EventChannel,
 };
 
@@ -26,6 +26,10 @@ pub struct ScoreEvent {
     pub score: i32,
 }
 
+pub struct StopBallAttractionEvent {
+    pub collision_time: f64,
+}
+
 #[derive(SystemDesc)]
 pub struct CollisionSystem;
 
@@ -36,15 +40,32 @@ type SystemData<'s> = (
     WriteStorage<'s, Transform>,
     ReadStorage<'s, Paddle>,
     ReadStorage<'s, Block>,
+    Read<'s, Time>,
     Write<'s, EventChannel<BlockCollisionEvent>>,
     Write<'s, EventChannel<LifeEvent>>,
     Write<'s, EventChannel<ScoreEvent>>,
+    Write<'s, EventChannel<StopBallAttractionEvent>>,
 );
 
 impl<'s> System<'s> for CollisionSystem {
     type SystemData = SystemData<'s>;
 
-    fn run(&mut self, (entities, mut balls, mut sticky_balls, mut transforms, paddles, blocks, mut block_collision_event_channel, mut life_event_channel, mut score_event_channel): SystemData) {
+    fn run(
+        &mut self,
+        (
+            entities,
+            mut balls,
+            mut sticky_balls,
+            mut transforms,
+            paddles,
+            blocks,
+            time,
+            mut block_collision_event_channel,
+            mut life_event_channel,
+            mut score_event_channel,
+            mut stop_ball_attraction_event_channel,
+        ): SystemData,
+    ) {
         // Compute union of blocks
         let block_compound: Compound<f32> = Compound::new(
             (&blocks, &transforms)
@@ -59,29 +80,27 @@ impl<'s> System<'s> for CollisionSystem {
         );
 
         // Get block entities
-        let block_entities: Vec<_> = (&entities, &blocks).join().map(|(entity, _)| entity).collect();
+        let block_entities: Vec<Entity> = (&entities, &blocks).join().map(|(entity, _)| entity).collect();
 
-        if let Some(val) = (&paddles, &transforms).join().next() {
-            let (paddle, paddle_transform): (&Paddle, &Transform) = val;
+        if let Some(val) = (&paddles, &transforms).join().next().map(|(paddle, paddle_transform)| (paddle, paddle_transform.translation())) {
+            let (paddle, paddle_translation): (&Paddle, &Vector3<f32>) = val;
+            let paddle_x = paddle_translation.x;
+            let paddle_y = paddle_translation.y;
 
-            let paddle_x = paddle_transform.translation().x;
-            let paddle_y = paddle_transform.translation().y;
-
-            for val in (&entities, &mut balls, &mut transforms).join() {
-                let (entity, ball, ball_transform): (Entity, &mut Ball, &mut Transform) = val;
-
+            let moving_balls: Vec<(Entity, &mut Ball, (), &mut Transform)> = (&entities, &mut balls, !&sticky_balls, &mut transforms).join().collect();
+            for (entity, ball, _, ball_transform) in moving_balls {
                 let ball_x = ball_transform.translation().x;
                 let ball_y = ball_transform.translation().y;
 
                 // Bounce at the top, left and right of the arena
                 if ball_x <= ball.radius {
-                    ball.direction.x = ball.direction.x.abs();
+                    ball.direction.as_mut_unchecked().x = ball.direction.x.abs();
                 }
                 if ball_x >= ARENA_WIDTH - ball.radius {
-                    ball.direction.x = -ball.direction.x.abs();
+                    ball.direction.as_mut_unchecked().x = -ball.direction.x.abs();
                 }
                 if ball_y >= ARENA_HEIGHT - ball.radius {
-                    ball.direction.y = -ball.direction.y.abs();
+                    ball.direction.as_mut_unchecked().y = -ball.direction.y.abs();
                 }
 
                 // Lose a life when ball reach the bottom of the arena
@@ -91,6 +110,7 @@ impl<'s> System<'s> for CollisionSystem {
                         period: 2.0,
                     };
 
+                    ball.velocity_mult = 1.0;
                     sticky_balls.insert(entity, sticky).expect("Unable to add entity to storage.");
                     ball_transform.set_translation_xyz(paddle_x, paddle.height + ball.radius, 0.0);
                     life_event_channel.single_write(LifeEvent);
@@ -106,14 +126,22 @@ impl<'s> System<'s> for CollisionSystem {
 
                 if query::contact(&paddle_pos, &paddle_shape, &ball_pos, &ball_shape, 0.0).is_some() {
                     let angle = ((paddle_x - ball_transform.translation().x) / paddle.width * f32::pi()).min(f32::pi() / 3.0).max(-f32::pi() / 3.0);
-                    ball.direction.x = -angle.sin();
-                    ball.direction.y = angle.cos();
+                    ball.direction = Unit::new_unchecked(Vector2::new(-angle.sin(), angle.cos()));
+
+                    stop_ball_attraction_event_channel.single_write(StopBallAttractionEvent {
+                        collision_time: time.absolute_time_seconds(),
+                    });
                 }
 
                 // Bounce at the blocks
                 if let Some(contact) = query::contact(&Isometry2::identity(), &block_compound, &ball_pos, &ball_shape, 0.0) {
+                    stop_ball_attraction_event_channel.single_write(StopBallAttractionEvent {
+                        collision_time: time.absolute_time_seconds(),
+                    });
+
                     let angle = (-ball.direction.perp(&contact.normal)).atan2(-ball.direction.dot(&contact.normal));
-                    ball.direction = -(Rotation2::new(2.0 * angle) * ball.direction).normalize();
+                    ball.direction = -(Rotation2::new(2.0 * angle) * ball.direction);
+                    ball.direction.renormalize();
 
                     // Get individual collided blocks
                     if block_compound.shapes().len() == block_entities.len() {

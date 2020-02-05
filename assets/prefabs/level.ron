@@ -67,7 +67,8 @@ Prefab(
                 element: Ball(
                     ball: (
                         radius: 11.0,
-                        velocity: 450,
+                        velocity: 450.0,
+                        velocity_mult: 1.0,
                         direction: [0.0, 1.0],
                     ),
                     sticky: (

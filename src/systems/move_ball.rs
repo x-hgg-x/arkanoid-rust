@@ -18,8 +18,8 @@ impl<'s> System<'s> for MoveBallSystem {
         for val in (&balls, !&sticky_balls, &mut transforms).join() {
             let (ball, _, ball_transform): (&Ball, (), &mut Transform) = val;
 
-            ball_transform.prepend_translation_x(ball.velocity * ball.direction.x * time.delta_seconds());
-            ball_transform.prepend_translation_y(ball.velocity * ball.direction.y * time.delta_seconds());
+            ball_transform.prepend_translation_x(ball.velocity * ball.velocity_mult * ball.direction.x * time.delta_seconds());
+            ball_transform.prepend_translation_y(ball.velocity * ball.velocity_mult * ball.direction.y * time.delta_seconds());
         }
     }
 }
