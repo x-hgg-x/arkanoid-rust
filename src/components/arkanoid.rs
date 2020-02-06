@@ -3,7 +3,7 @@ use amethyst::{
     core::math::{Unit, Vector2},
     derive::PrefabData,
     ecs::{Component, DenseVecStorage, Entity, WriteStorage},
-    renderer::sprite::prefab::SpriteScenePrefab,
+    renderer::{resources::Tint, sprite::prefab::SpriteScenePrefab},
     Error,
 };
 
@@ -53,8 +53,16 @@ pub enum ArkanoidElementPrefab {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PrefabData)]
+#[serde(deny_unknown_fields, transparent)]
+pub struct TintPrefab {
+    #[prefab(Component)]
+    tint: Tint,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, PrefabData)]
 #[serde(deny_unknown_fields)]
 pub struct ArkanoidPrefabData {
     sprite_scene: SpriteScenePrefab,
+    tint: Option<TintPrefab>,
     element: ArkanoidElementPrefab,
 }

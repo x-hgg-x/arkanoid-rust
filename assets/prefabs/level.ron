@@ -64,6 +64,7 @@ Prefab(
                         translation: (360.0, 35.0, 0.0),
                     ),
                 ),
+                tint: ((1.0, 1.0, 1.0, 1.0)),
                 element: Ball(
                     ball: (
                         radius: 11.0,

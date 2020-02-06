@@ -8,6 +8,7 @@ use amethyst::{
     },
     derive::SystemDesc,
     ecs::{Entities, Entity, Join, Read, ReadStorage, System, SystemData as _, Write, WriteStorage},
+    renderer::{palette::rgb::Rgb, resources::Tint},
     shrev::EventChannel,
 };
 
@@ -37,6 +38,7 @@ type SystemData<'s> = (
     Entities<'s>,
     WriteStorage<'s, Ball>,
     WriteStorage<'s, StickyBall>,
+    WriteStorage<'s, Tint>,
     WriteStorage<'s, Transform>,
     ReadStorage<'s, Paddle>,
     ReadStorage<'s, Block>,
@@ -56,6 +58,7 @@ impl<'s> System<'s> for CollisionSystem {
             entities,
             mut balls,
             mut sticky_balls,
+            mut tints,
             mut transforms,
             paddles,
             blocks,
@@ -87,8 +90,8 @@ impl<'s> System<'s> for CollisionSystem {
             let paddle_x = paddle_translation.x;
             let paddle_y = paddle_translation.y;
 
-            let moving_balls: Vec<(Entity, &mut Ball, (), &mut Transform)> = (&entities, &mut balls, !&sticky_balls, &mut transforms).join().collect();
-            for (entity, ball, _, ball_transform) in moving_balls {
+            let moving_balls: Vec<(Entity, &mut Ball, (), &mut Tint, &mut Transform)> = (&entities, &mut balls, !&sticky_balls, &mut tints, &mut transforms).join().collect();
+            for (entity, ball, _, ball_tint, ball_transform) in moving_balls {
                 let ball_x = ball_transform.translation().x;
                 let ball_y = ball_transform.translation().y;
 
@@ -111,6 +114,7 @@ impl<'s> System<'s> for CollisionSystem {
                     };
 
                     ball.velocity_mult = 1.0;
+                    ball_tint.0.color = Rgb::new(1.0, 1.0, 1.0);
                     sticky_balls.insert(entity, sticky).expect("Unable to add entity to storage.");
                     ball_transform.set_translation_xyz(paddle_x, paddle.height + ball.radius, 0.0);
                     life_event_channel.single_write(LifeEvent);
