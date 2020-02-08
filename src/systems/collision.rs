@@ -3,7 +3,7 @@ use crate::states::{ARENA_HEIGHT, ARENA_WIDTH};
 
 use amethyst::{
     core::{
-        math::{Isometry2, RealField, Rotation2, Unit, Vector2, Vector3},
+        math::{Isometry2, RealField, Rotation2, Unit, Vector3},
         Time, Transform,
     },
     derive::SystemDesc,
@@ -75,8 +75,8 @@ impl<'s> System<'s> for CollisionSystem {
                 .join()
                 .map(|(block, block_transform): (&Block, &Transform)| {
                     (
-                        Isometry2::new(Vector2::new(block_transform.translation().x, block_transform.translation().y), 0.0),
-                        ShapeHandle::new(Cuboid::new(Vector2::new(block.width / 2.0, block.height / 2.0))),
+                        Isometry2::new([block_transform.translation().x, block_transform.translation().y].into(), 0.0),
+                        ShapeHandle::new(Cuboid::new([block.width / 2.0, block.height / 2.0].into())),
                     )
                 })
                 .collect(),
@@ -123,14 +123,14 @@ impl<'s> System<'s> for CollisionSystem {
 
                 // Bounce at the paddle
                 let ball_shape = BallShape::new(ball.radius);
-                let ball_pos = Isometry2::new(Vector2::new(ball_x, ball_y), 0.0);
+                let ball_pos = Isometry2::new([ball_x, ball_y].into(), 0.0);
 
-                let paddle_shape = Cuboid::new(Vector2::new(paddle.width / 2.0, paddle.height / 2.0));
-                let paddle_pos = Isometry2::new(Vector2::new(paddle_x, paddle_y), 0.0);
+                let paddle_shape = Cuboid::new([paddle.width / 2.0, paddle.height / 2.0].into());
+                let paddle_pos = Isometry2::new([paddle_x, paddle_y].into(), 0.0);
 
                 if query::contact(&paddle_pos, &paddle_shape, &ball_pos, &ball_shape, 0.0).is_some() {
                     let angle = ((paddle_x - ball_transform.translation().x) / paddle.width * f32::pi()).min(f32::pi() / 3.0).max(-f32::pi() / 3.0);
-                    ball.direction = Unit::new_unchecked(Vector2::new(-angle.sin(), angle.cos()));
+                    ball.direction = Unit::new_unchecked([-angle.sin(), angle.cos()].into());
 
                     stop_ball_attraction_event_channel.single_write(StopBallAttractionEvent {
                         collision_time: time.absolute_time_seconds(),

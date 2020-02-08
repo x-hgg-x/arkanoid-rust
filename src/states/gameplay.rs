@@ -43,7 +43,7 @@ impl SimpleState for GameplayState {
     fn on_stop(&mut self, data: StateData<GameData>) {
         let world = data.world;
         let entities: Vec<_> = world.entities().join().collect();
-        world.delete_entities(&entities).expect("Failed to delete entity.");
+        world.delete_entities(&entities).expect("Failed to delete entities.");
 
         *world.write_resource() = CurrentState::Paused;
         *world.write_resource::<Game>() = Default::default();

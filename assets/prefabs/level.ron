@@ -61,7 +61,7 @@ Prefab(
                         sprite_number: 19,
                     ),
                     transform: (
-                        translation: (360.0, 35.0, 0.0),
+                        translation: (360.0, 35.0, 0.2),
                     ),
                 ),
                 tint: ((1.0, 1.0, 1.0, 1.0)),

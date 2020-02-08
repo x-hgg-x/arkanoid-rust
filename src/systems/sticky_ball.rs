@@ -5,7 +5,7 @@ use precompile::bindings::{ActionBinding, ArkanoidBindings};
 
 use amethyst::{
     core::{
-        math::{RealField, Unit, Vector2},
+        math::{RealField, Unit},
         Time, Transform,
     },
     derive::SystemDesc,
@@ -46,7 +46,7 @@ impl<'s> System<'s> for StickyBallSystem {
 
                 // Set ball direction
                 let angle = ((paddle_x - ball_transform.translation().x) / paddle_width * f32::pi()).min(f32::pi() / 3.0).max(-f32::pi() / 3.0);
-                ball.direction = Unit::new_unchecked(Vector2::new(-angle.sin(), angle.cos()));
+                ball.direction = Unit::new_unchecked([-angle.sin(), angle.cos()].into());
             }
 
             if let Some(true) = input.action_is_down(&ActionBinding::ReleaseBall) {

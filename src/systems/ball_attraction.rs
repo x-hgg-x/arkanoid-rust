@@ -5,7 +5,7 @@ use precompile::bindings::{ActionBinding, ArkanoidBindings};
 
 use amethyst::{
     core::{
-        math::{Point3, Unit, Vector2, Vector3},
+        math::{Unit, Vector2, Vector3},
         Time, Transform,
     },
     derive::SystemDesc,
@@ -14,7 +14,7 @@ use amethyst::{
     prelude::*,
     renderer::{
         debug_drawing::DebugLines,
-        palette::{rgb::Rgb, Alpha},
+        palette::rgb::{Rgb, Srgba},
         resources::Tint,
     },
     shrev::{EventChannel, ReaderId},
@@ -87,18 +87,11 @@ impl<'s> System<'s> for BallAttractionSystem {
             for val in (&mut balls, !&sticky_balls, &mut tints, &transforms).join() {
                 let (ball, _, ball_tint, ball_transform): (&mut Ball, (), &mut Tint, &Transform) = val;
 
-                let ball_source: Vector2<f32> = Vector2::new(ball_transform.translation().x, ball_transform.translation().y);
-                let paddle_target: Vector2<f32> = Vector2::new(paddle_translation.x, paddle_translation.y + paddle_height / 2.0 + ball.radius);
+                let ball_source: Vector2<f32> = [ball_transform.translation().x, ball_transform.translation().y].into();
+                let paddle_target: Vector2<f32> = [paddle_translation.x, paddle_translation.y + paddle_height / 2.0 + ball.radius].into();
 
                 if ball.velocity_mult > 1.0 {
-                    debug_lines.draw_line(
-                        Point3::new(ball_source.x, ball_source.y, 0.5),
-                        Point3::new(paddle_target.x, paddle_target.y, 0.5),
-                        Alpha {
-                            color: Rgb::new(0.0, 0.0, 0.0),
-                            alpha: 1.0,
-                        },
-                    );
+                    debug_lines.draw_line([ball_source.x, ball_source.y, 0.1].into(), [paddle_target.x, paddle_target.y, 0.1].into(), Srgba::default());
                 }
 
                 if !is_timeout {

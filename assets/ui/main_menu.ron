@@ -4,6 +4,9 @@ Container(
         id: "main_menu",
         anchor: Middle,
         pivot: Middle,
+        width: 1.0,
+        height: 1.0,
+        percent: true,
     ),
     children: [
         Label(

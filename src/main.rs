@@ -11,14 +11,10 @@ use states::LoadingState;
 
 use precompile::PrecompiledBundle;
 
-use amethyst::{assets::PrefabLoaderSystemDesc, core::frame_limiter::FrameRateLimitConfig, prelude::*, renderer::sprite::prefab::SpriteScenePrefab, LogLevelFilter, LoggerConfig};
+use amethyst::{assets::PrefabLoaderSystemDesc, core::frame_limiter::FrameRateLimitConfig, prelude::*, renderer::sprite::prefab::SpriteScenePrefab, LoggerConfig};
 
 fn main() -> amethyst::Result<()> {
-    amethyst::Logger::from_config(LoggerConfig {
-        log_gfx_backend_level: Some(LogLevelFilter::Off),
-        ..Default::default()
-    })
-    .start();
+    amethyst::Logger::from_config(LoggerConfig::load("config/logger.ron")?).start();
 
     let game_data = GameDataBuilder::new()
         .with_bundle(PrecompiledBundle {

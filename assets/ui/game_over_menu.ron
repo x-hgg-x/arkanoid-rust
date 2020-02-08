@@ -4,8 +4,9 @@ Container(
         id: "game_over_menu",
         anchor: Middle,
         pivot: Middle,
-        width: 720,
-        height: 600,
+        width: 1.0,
+        height: 1.0,
+        percent: true,
     ),
     children: [
         Label(
