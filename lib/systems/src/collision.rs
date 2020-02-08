@@ -1,5 +1,5 @@
-use crate::components::{Ball, Block, Paddle, StickyBall};
-use crate::states::{ARENA_HEIGHT, ARENA_WIDTH};
+use components::{Ball, Block, Paddle, StickyBall};
+use resources::{ARENA_HEIGHT, ARENA_WIDTH};
 
 use amethyst::{
     core::{

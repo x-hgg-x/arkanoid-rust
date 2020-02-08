@@ -1,5 +1,6 @@
-use crate::components::{ArkanoidPrefabData, CameraPrefabData, GamePrefabHandles, MenuPrefabHandles, PrefabHandles};
-use crate::states::MainMenuState;
+use crate::MainMenuState;
+
+use components::{ArkanoidPrefabData, CameraPrefabData, GamePrefabHandles, MenuPrefabHandles, PrefabHandles};
 
 use amethyst::{
     assets::{PrefabLoader, ProgressCounter, RonFormat},

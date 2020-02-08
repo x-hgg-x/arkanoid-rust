@@ -1,4 +1,4 @@
-use crate::components::*;
+use crate::*;
 
 use amethyst::{
     assets::{Handle, Prefab},

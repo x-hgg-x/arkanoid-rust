@@ -1,7 +1,7 @@
-use crate::components::{Ball, Paddle, StickyBall};
-use crate::systems::StopBallAttractionEvent;
+use crate::StopBallAttractionEvent;
 
-use precompile::bindings::{ActionBinding, ArkanoidBindings};
+use bundle::bindings::{ActionBinding, ArkanoidBindings};
+use components::{Ball, Paddle, StickyBall};
 
 use amethyst::{
     core::{

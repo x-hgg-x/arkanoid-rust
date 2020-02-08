@@ -17,12 +17,12 @@ use amethyst::{
     utils::fps_counter::FpsCounterBundle,
 };
 
-pub struct PrecompiledBundle {
+pub struct StartingBundle {
     pub bindings_config_path: String,
     pub display_config_path: String,
 }
 
-impl<'a, 'b> SystemBundle<'a, 'b> for PrecompiledBundle {
+impl<'a, 'b> SystemBundle<'a, 'b> for StartingBundle {
     fn build(self, world: &mut World, builder: &mut DispatcherBuilder<'a, 'b>) -> Result<(), Error> {
         RenderingBundle::<DefaultBackend>::new()
             .with_plugin(RenderToWindow::from_config_path(self.display_config_path)?.with_clear([0.0, 0.0, 0.0, 1.0]))

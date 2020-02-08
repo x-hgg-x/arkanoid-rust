@@ -1,6 +1,7 @@
-use crate::components::Block;
-use crate::resources::{Game, GameEvent, NUM_LIFES};
-use crate::systems::{BlockCollisionEvent, ScoreEvent};
+use crate::{BlockCollisionEvent, ScoreEvent};
+
+use components::Block;
+use resources::{Game, GameEvent, NUM_LIFES};
 
 use amethyst::{
     derive::SystemDesc,

@@ -1,0 +1,12 @@
+[package]
+name = "systems"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+bundle = { path = "../bundle" }
+components = { path = "../components" }
+resources = { path = "../resources" }
+states = { path = "../states" }
+amethyst = { version = "0.14", features = ["vulkan"] }
+ncollide2d = "0.21"

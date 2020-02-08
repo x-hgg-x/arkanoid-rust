@@ -1,18 +1,13 @@
-use crate::components::PrefabHandles;
-use crate::resources::{CurrentState, Game, GameEvent};
-use crate::states::{GameOverState, LevelCompleteState, PausedState};
+use crate::{GameOverState, LevelCompleteState, PausedState};
+
+use components::PrefabHandles;
+use resources::{CurrentState, Game, GameEvent};
 
 use amethyst::{
     ecs::Join,
     input::{is_key_down, VirtualKeyCode},
     prelude::*,
 };
-
-pub const ARENA_WIDTH: f32 = 720.0;
-pub const ARENA_HEIGHT: f32 = 600.0;
-
-pub const LIFE_TEXT_ID: &str = "life";
-pub const SCORE_TEXT_ID: &str = "score";
 
 #[derive(Default)]
 pub struct GameplayState;

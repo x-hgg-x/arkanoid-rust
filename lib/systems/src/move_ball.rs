@@ -1,4 +1,4 @@
-use crate::components::{Ball, StickyBall};
+use components::{Ball, StickyBall};
 
 use amethyst::{
     core::{Time, Transform},

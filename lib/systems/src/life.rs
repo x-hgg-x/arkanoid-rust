@@ -1,6 +1,6 @@
-use crate::resources::{Game, GameEvent};
-use crate::states::LIFE_TEXT_ID;
-use crate::systems::LifeEvent;
+use crate::LifeEvent;
+
+use resources::{Game, GameEvent, LIFE_TEXT_ID};
 
 use amethyst::{
     derive::SystemDesc,

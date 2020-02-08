@@ -1,5 +1,6 @@
-use crate::components::PrefabHandles;
-use crate::states::{MainMenuState, Menu};
+use crate::{GameplayState, Menu};
+
+use components::PrefabHandles;
 
 use amethyst::{
     ecs::Entity,
@@ -8,12 +9,12 @@ use amethyst::{
 };
 
 #[derive(Default)]
-pub struct PausedState {
-    pause_menu: Option<Entity>,
+pub struct MainMenuState {
+    main_menu: Option<Entity>,
     selection: i32,
 }
 
-impl Menu for PausedState {
+impl Menu for MainMenuState {
     fn get_selection(&self) -> i32 {
         self.selection
     }
@@ -24,43 +25,41 @@ impl Menu for PausedState {
 
     fn confirm_selection(&self) -> SimpleTrans {
         match self.selection {
-            // Resume
-            0 => Trans::Pop,
-            // Main Menu
-            1 => Trans::Replace(Box::new(MainMenuState::default())),
+            // New game
+            0 => Trans::Switch(Box::new(GameplayState::default())),
             // Exit
-            2 => Trans::Quit,
+            1 => Trans::Quit,
             _ => unreachable!(),
         }
     }
 
     fn get_menu_ids(&self) -> &[&str] {
-        &["resume", "main_menu", "exit"]
+        &["new_game", "exit"]
     }
 
     fn get_cursor_menu_ids(&self) -> &[&str] {
-        &["cursor_resume", "cursor_main_menu", "cursor_exit"]
+        &["cursor_new_game", "cursor_exit"]
     }
 }
 
-impl SimpleState for PausedState {
+impl SimpleState for MainMenuState {
     fn on_start(&mut self, data: StateData<GameData>) {
         let world = data.world;
 
-        let pause_menu = world.read_resource::<PrefabHandles>().menu.pause_menu.clone();
-        self.pause_menu = Some(world.create_entity().with(pause_menu).build());
+        let main_menu = world.read_resource::<PrefabHandles>().menu.main_menu.clone();
+        self.main_menu = Some(world.create_entity().with(main_menu).build());
     }
 
     fn on_stop(&mut self, data: StateData<GameData>) {
-        if let Some(entity) = self.pause_menu {
+        if let Some(entity) = self.main_menu {
             data.world.delete_entity(entity).expect("Failed to delete entity.");
         }
     }
 
     fn handle_event(&mut self, data: StateData<GameData>, event: StateEvent) -> SimpleTrans {
         if let StateEvent::Window(event) = &event {
-            if is_key_down(&event, VirtualKeyCode::Escape) {
-                return Trans::Pop;
+            if is_key_down(&event, VirtualKeyCode::Escape) || is_key_down(&event, VirtualKeyCode::Q) {
+                return Trans::Quit;
             }
         }
         self.update_menu(data.world, &event)

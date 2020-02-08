@@ -1,7 +1,6 @@
-use crate::components::Paddle;
-use crate::states::ARENA_WIDTH;
-
-use precompile::bindings::{ArkanoidBindings, AxisBinding};
+use bundle::bindings::{ArkanoidBindings, AxisBinding};
+use components::Paddle;
+use resources::ARENA_WIDTH;
 
 use amethyst::{
     core::{Time, Transform},

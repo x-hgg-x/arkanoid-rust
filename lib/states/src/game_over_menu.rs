@@ -1,5 +1,7 @@
-use crate::components::PrefabHandles;
-use crate::states::{MainMenuState, Menu, SCORE_TEXT_ID};
+use crate::{GameplayState, MainMenuState, Menu};
+
+use components::PrefabHandles;
+use resources::SCORE_TEXT_ID;
 
 use amethyst::{
     ecs::{Entity, WriteStorage},
@@ -7,17 +9,17 @@ use amethyst::{
     ui::{UiFinder, UiText},
 };
 
-pub struct LevelCompleteState {
-    level_complete_menu: Option<Entity>,
+pub struct GameOverState {
+    game_over_menu: Option<Entity>,
     selection: i32,
     score: i32,
     score_updated: bool,
 }
 
-impl LevelCompleteState {
+impl GameOverState {
     pub fn new(score: i32) -> Self {
         Self {
-            level_complete_menu: None,
+            game_over_menu: None,
             selection: 0,
             score,
             score_updated: false,
@@ -25,7 +27,7 @@ impl LevelCompleteState {
     }
 }
 
-impl Menu for LevelCompleteState {
+impl Menu for GameOverState {
     fn get_selection(&self) -> i32 {
         self.selection
     }
@@ -36,31 +38,35 @@ impl Menu for LevelCompleteState {
 
     fn confirm_selection(&self) -> SimpleTrans {
         match self.selection {
+            // Restart
+            0 => Trans::Switch(Box::new(GameplayState::default())),
             // Main Menu
-            0 => Trans::Switch(Box::new(MainMenuState::default())),
+            1 => Trans::Switch(Box::new(MainMenuState::default())),
+            // Exit
+            2 => Trans::Quit,
             _ => unreachable!(),
         }
     }
 
     fn get_menu_ids(&self) -> &[&str] {
-        &["main_menu"]
+        &["restart", "main_menu", "exit"]
     }
 
     fn get_cursor_menu_ids(&self) -> &[&str] {
-        &["cursor_main_menu"]
+        &["cursor_restart", "cursor_main_menu", "cursor_exit"]
     }
 }
 
-impl SimpleState for LevelCompleteState {
+impl SimpleState for GameOverState {
     fn on_start(&mut self, data: StateData<GameData>) {
         let world = data.world;
 
-        let level_complete_menu = world.read_resource::<PrefabHandles>().menu.level_complete_menu.clone();
-        self.level_complete_menu = Some(world.create_entity().with(level_complete_menu).build());
+        let game_over_menu = world.read_resource::<PrefabHandles>().menu.game_over_menu.clone();
+        self.game_over_menu = Some(world.create_entity().with(game_over_menu).build());
     }
 
     fn on_stop(&mut self, data: StateData<GameData>) {
-        if let Some(entity) = self.level_complete_menu {
+        if let Some(entity) = self.game_over_menu {
             data.world.delete_entity(entity).expect("Failed to delete entity.");
         }
     }

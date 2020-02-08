@@ -1,15 +1,8 @@
-mod bundle;
-mod components;
-mod resources;
-mod states;
-mod systems;
-
-use bundle::ArkanoidBundle;
+use bundle::StartingBundle;
 use components::{ArkanoidPrefabData, CameraPrefabData};
 use resources::CurrentState;
 use states::LoadingState;
-
-use precompile::PrecompiledBundle;
+use systems::ArkanoidBundle;
 
 use amethyst::{assets::PrefabLoaderSystemDesc, core::frame_limiter::FrameRateLimitConfig, prelude::*, renderer::sprite::prefab::SpriteScenePrefab, LoggerConfig};
 
@@ -17,7 +10,7 @@ fn main() -> amethyst::Result<()> {
     amethyst::Logger::from_config(LoggerConfig::load("config/logger.ron")?).start();
 
     let game_data = GameDataBuilder::new()
-        .with_bundle(PrecompiledBundle {
+        .with_bundle(StartingBundle {
             bindings_config_path: String::from("config/bindings.ron"),
             display_config_path: String::from("config/display.ron"),
         })?

@@ -1,6 +1,6 @@
-use crate::resources::Game;
-use crate::states::SCORE_TEXT_ID;
-use crate::systems::ScoreEvent;
+use crate::ScoreEvent;
+
+use resources::{Game, SCORE_TEXT_ID};
 
 use amethyst::{
     derive::SystemDesc,

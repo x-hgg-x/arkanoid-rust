@@ -1,7 +1,6 @@
-use crate::components::{Ball, Paddle, StickyBall};
-use crate::states::ARENA_WIDTH;
-
-use precompile::bindings::{ActionBinding, ArkanoidBindings};
+use bundle::bindings::{ActionBinding, ArkanoidBindings};
+use components::{Ball, Paddle, StickyBall};
+use resources::ARENA_WIDTH;
 
 use amethyst::{
     core::{

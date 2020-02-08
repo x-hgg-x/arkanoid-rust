@@ -3,9 +3,13 @@ name = "arkanoid"
 version = "0.1.0"
 edition = "2018"
 
+[workspace]
+members = [ "lib/*" ]
+
 [dependencies]
-precompile = { path = "precompile" }
+bundle = { path = "lib/bundle" }
+components = { path = "lib/components" }
+resources = { path = "lib/resources" }
+states = { path = "lib/states" }
+systems = { path = "lib/systems" }
 amethyst = { version = "0.14", features = ["vulkan"] }
-serde = "1.0"
-serde_derive = "1.0"
-ncollide2d = "0.21"
