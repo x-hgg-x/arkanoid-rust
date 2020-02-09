@@ -1,4 +1,6 @@
-use components::{Ball, Block, Paddle, StickyBall};
+use crate::{BallAttractionVfxEvent, BlockCollisionEvent, LifeEvent, ScoreEvent, StopBallAttractionEvent};
+
+use components::{AttractionLine, Ball, Block, Paddle, StickyBall};
 use resources::{ARENA_HEIGHT, ARENA_WIDTH};
 
 use amethyst::{
@@ -8,7 +10,7 @@ use amethyst::{
     },
     derive::SystemDesc,
     ecs::{Entities, Entity, Join, Read, ReadStorage, System, SystemData as _, Write, WriteStorage},
-    renderer::{palette::rgb::Rgb, resources::Tint},
+    renderer::palette::rgb::Rgb,
     shrev::EventChannel,
 };
 
@@ -17,20 +19,6 @@ use ncollide2d::{
     shape::{Ball as BallShape, Compound, Cuboid, ShapeHandle},
 };
 
-pub struct BlockCollisionEvent {
-    pub entity: Entity,
-}
-
-pub struct LifeEvent;
-
-pub struct ScoreEvent {
-    pub score: i32,
-}
-
-pub struct StopBallAttractionEvent {
-    pub collision_time: f64,
-}
-
 #[derive(SystemDesc)]
 pub struct CollisionSystem;
 
@@ -38,7 +26,7 @@ type SystemData<'s> = (
     Entities<'s>,
     WriteStorage<'s, Ball>,
     WriteStorage<'s, StickyBall>,
-    WriteStorage<'s, Tint>,
+    ReadStorage<'s, AttractionLine>,
     WriteStorage<'s, Transform>,
     ReadStorage<'s, Paddle>,
     ReadStorage<'s, Block>,
@@ -47,6 +35,7 @@ type SystemData<'s> = (
     Write<'s, EventChannel<LifeEvent>>,
     Write<'s, EventChannel<ScoreEvent>>,
     Write<'s, EventChannel<StopBallAttractionEvent>>,
+    Write<'s, EventChannel<BallAttractionVfxEvent>>,
 );
 
 impl<'s> System<'s> for CollisionSystem {
@@ -58,7 +47,7 @@ impl<'s> System<'s> for CollisionSystem {
             entities,
             mut balls,
             mut sticky_balls,
-            mut tints,
+            attraction_lines,
             mut transforms,
             paddles,
             blocks,
@@ -67,6 +56,7 @@ impl<'s> System<'s> for CollisionSystem {
             mut life_event_channel,
             mut score_event_channel,
             mut stop_ball_attraction_event_channel,
+            mut ball_attraction_vfx_event_channel,
         ): SystemData,
     ) {
         // Compute union of blocks
@@ -90,8 +80,13 @@ impl<'s> System<'s> for CollisionSystem {
             let paddle_x = paddle_translation.x;
             let paddle_y = paddle_translation.y;
 
-            let moving_balls: Vec<(Entity, &mut Ball, (), &mut Tint, &mut Transform)> = (&entities, &mut balls, !&sticky_balls, &mut tints, &mut transforms).join().collect();
-            for (entity, ball, _, ball_tint, ball_transform) in moving_balls {
+            let ball_lines: Vec<(Entity, &mut Ball, &mut Transform, Entity)> = (&entities, &mut balls, !&sticky_balls, &mut transforms)
+                .join()
+                .zip((&entities, &attraction_lines).join())
+                .map(|((ball_entity, ball, _, ball_transform), (attraction_line_entity, _))| (ball_entity, ball, ball_transform, attraction_line_entity))
+                .collect();
+
+            for (ball_entity, ball, ball_transform, attraction_line_entity) in ball_lines {
                 let ball_x = ball_transform.translation().x;
                 let ball_y = ball_transform.translation().y;
 
@@ -114,8 +109,15 @@ impl<'s> System<'s> for CollisionSystem {
                     };
 
                     ball.velocity_mult = 1.0;
-                    ball_tint.0.color = Rgb::new(1.0, 1.0, 1.0);
-                    sticky_balls.insert(entity, sticky).expect("Unable to add entity to storage.");
+
+                    ball_attraction_vfx_event_channel.single_write(BallAttractionVfxEvent {
+                        ball_entity,
+                        ball_color: Rgb::new(1.0, 1.0, 1.0),
+                        attraction_line_entity,
+                        attraction_line_alpha: 0.0,
+                    });
+
+                    sticky_balls.insert(ball_entity, sticky).expect("Unable to add entity to storage.");
                     ball_transform.set_translation_xyz(paddle_x, paddle.height + ball.radius, 0.0);
                     life_event_channel.single_write(LifeEvent);
                     score_event_channel.single_write(ScoreEvent { score: -1000 });

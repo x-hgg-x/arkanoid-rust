@@ -34,6 +34,7 @@ Prefab(
                                 sprites: [
                                     (x: 0,   y: 96, width: 144, height: 24),
                                     (x: 144, y: 96, width: 24,  height: 24),
+                                    (x: 168, y: 96, width: 1,   height: 1),
                                 ],
                             )),
                         ],
@@ -77,6 +78,22 @@ Prefab(
                         period: 2.0,
                     )
                 )
+            ),
+        ),
+        (
+            data: (
+                sprite_scene: (
+                    render: (
+                        sheet: "arkanoid",
+                        sprite_number: 20,
+                    ),
+                    transform: (
+                        translation: (360.0, 35.0, 0.1),
+                        scale: (3.0, 100.0, 1.0),
+                    ),
+                ),
+                tint: ((1.0, 1.0, 1.0, 0.0)),
+                element: AttractionLine(()),
             ),
         ),
         (

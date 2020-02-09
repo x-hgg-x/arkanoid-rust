@@ -1,4 +1,5 @@
 mod ball_attraction;
+mod ball_attraction_vfx;
 mod block_health;
 mod collision;
 mod life;
@@ -8,6 +9,7 @@ mod score;
 mod sticky_ball;
 
 pub use ball_attraction::*;
+pub use ball_attraction_vfx::*;
 pub use block_health::*;
 pub use collision::*;
 pub use life::*;
@@ -20,10 +22,32 @@ use resources::CurrentState;
 
 use amethyst::{
     core::SystemBundle,
-    ecs::{DispatcherBuilder, World},
+    ecs::{DispatcherBuilder, Entity, World},
     prelude::*,
+    renderer::palette::rgb::Rgb,
     Error,
 };
+
+pub struct BlockCollisionEvent {
+    pub entity: Entity,
+}
+
+pub struct LifeEvent;
+
+pub struct ScoreEvent {
+    pub score: i32,
+}
+
+pub struct StopBallAttractionEvent {
+    pub collision_time: f64,
+}
+
+pub struct BallAttractionVfxEvent {
+    pub ball_entity: Entity,
+    pub ball_color: Rgb,
+    pub attraction_line_entity: Entity,
+    pub attraction_line_alpha: f32,
+}
 
 pub struct ArkanoidBundle;
 
@@ -34,6 +58,7 @@ impl<'a, 'b> SystemBundle<'a, 'b> for ArkanoidBundle {
         builder.add(BallAttractionSystem::new(world).pausable(CurrentState::Running), "ball_attraction_system", &["sticky_ball_system"]);
         builder.add(MoveBallSystem.pausable(CurrentState::Running), "move_ball_system", &["ball_attraction_system"]);
         builder.add(CollisionSystem.pausable(CurrentState::Running), "collision_system", &["move_ball_system"]);
+        builder.add(BallAttractionVfxSystem::new(world).pausable(CurrentState::Running), "ball_attraction_vfx_system", &["collision_system"]);
         builder.add(BlockHealthSystem::new(world).pausable(CurrentState::Running), "block_health_system", &["collision_system"]);
         builder.add(LifeSystem::new(world).pausable(CurrentState::Running), "life_system", &["collision_system"]);
         builder.add(ScoreSystem::new(world).pausable(CurrentState::Running), "score_system", &["collision_system"]);

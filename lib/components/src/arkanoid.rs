@@ -2,7 +2,7 @@ use amethyst::{
     assets::{PrefabData, ProgressCounter},
     core::math::{Unit, Vector2},
     derive::PrefabData,
-    ecs::{Component, DenseVecStorage, Entity, WriteStorage},
+    ecs::{Component, DenseVecStorage, Entity, NullStorage, WriteStorage},
     renderer::{resources::Tint, sprite::prefab::SpriteScenePrefab},
     Error,
 };
@@ -35,6 +35,12 @@ pub struct StickyBall {
     pub period: f32,
 }
 
+#[derive(Debug, Default, Clone, Component, Deserialize, Serialize, PrefabData)]
+#[storage(NullStorage)]
+#[prefab(Component)]
+#[serde(deny_unknown_fields)]
+pub struct AttractionLine;
+
 #[derive(Debug, Clone, Component, Deserialize, Serialize, PrefabData)]
 #[prefab(Component)]
 #[serde(deny_unknown_fields)]
@@ -49,6 +55,7 @@ pub struct Block {
 pub enum ArkanoidElementPrefab {
     Paddle(Paddle),
     Ball { ball: Ball, sticky: Option<StickyBall> },
+    AttractionLine(AttractionLine),
     Block(Block),
 }
 

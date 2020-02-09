@@ -9,7 +9,7 @@ use amethyst::{
     input::InputBundle,
     prelude::*,
     renderer::{
-        plugins::{RenderDebugLines, RenderFlat2D, RenderToWindow},
+        plugins::{ RenderFlat2D, RenderToWindow},
         types::DefaultBackend,
         RenderingBundle,
     },
@@ -28,7 +28,6 @@ impl<'a, 'b> SystemBundle<'a, 'b> for StartingBundle {
             .with_plugin(RenderToWindow::from_config_path(self.display_config_path)?.with_clear([0.0, 0.0, 0.0, 1.0]))
             .with_plugin(RenderFlat2D::default())
             .with_plugin(RenderUi::default())
-            .with_plugin(RenderDebugLines::default())
             .build(world, builder)?;
 
         FpsCounterBundle::default().build(world, builder)?;
