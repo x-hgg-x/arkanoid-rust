@@ -24,7 +24,7 @@ use amethyst::{
     core::SystemBundle,
     ecs::{DispatcherBuilder, Entity, World},
     prelude::*,
-    renderer::palette::rgb::Rgb,
+    renderer::palette::rgb::Srgba,
     Error,
 };
 
@@ -44,9 +44,9 @@ pub struct StopBallAttractionEvent {
 
 pub struct BallAttractionVfxEvent {
     pub ball_entity: Entity,
-    pub ball_color: Rgb,
+    pub ball_color: Srgba,
     pub attraction_line_entity: Entity,
-    pub attraction_line_alpha: f32,
+    pub attraction_line_color: Srgba,
 }
 
 pub struct ArkanoidBundle;

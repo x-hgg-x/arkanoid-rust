@@ -12,7 +12,7 @@ use amethyst::{
     ecs::{Entities, Entity, Join, Read, ReadStorage, System, SystemData as _, World, Write, WriteStorage},
     input::InputHandler,
     prelude::*,
-    renderer::palette::rgb::Rgb,
+    renderer::palette::rgb::Srgba,
     shrev::{EventChannel, ReaderId},
 };
 
@@ -76,9 +76,9 @@ impl<'s> System<'s> for BallAttractionSystem {
 
                         ball_attraction_vfx_event_channel.single_write(BallAttractionVfxEvent {
                             ball_entity,
-                            ball_color: Rgb::new(1.0, 1.0, 1.0),
+                            ball_color: Srgba::new(1.0, 1.0, 1.0, 1.0),
                             attraction_line_entity,
-                            attraction_line_alpha: 0.0,
+                            attraction_line_color: Srgba::new(1.0, 1.0, 1.0, 0.0),
                         });
                     }
                 }
@@ -109,18 +109,18 @@ impl<'s> System<'s> for BallAttractionSystem {
 
                         ball_attraction_vfx_event_channel.single_write(BallAttractionVfxEvent {
                             ball_entity,
-                            ball_color: Rgb::new(0.9, 0.3, 0.2),
+                            ball_color: Srgba::new(0.9, 0.3, 0.2, 1.0),
                             attraction_line_entity,
-                            attraction_line_alpha: 1.0,
+                            attraction_line_color: Srgba::new(1.0, 1.0, 1.0, 1.0),
                         });
                     } else if ball.velocity_mult > 1.0 && self.last_collision_time < self.time_accelerated {
                         ball.velocity_mult = 1.0;
 
                         ball_attraction_vfx_event_channel.single_write(BallAttractionVfxEvent {
                             ball_entity,
-                            ball_color: Rgb::new(1.0, 1.0, 1.0),
+                            ball_color: Srgba::new(1.0, 1.0, 1.0, 1.0),
                             attraction_line_entity,
-                            attraction_line_alpha: 0.0,
+                            attraction_line_color: Srgba::new(1.0, 1.0, 1.0, 0.0),
                         });
                     }
                 }

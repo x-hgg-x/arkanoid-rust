@@ -10,7 +10,7 @@ use amethyst::{
     },
     derive::SystemDesc,
     ecs::{Entities, Entity, Join, Read, ReadStorage, System, SystemData as _, Write, WriteStorage},
-    renderer::palette::rgb::Rgb,
+    renderer::palette::rgb::Srgba,
     shrev::EventChannel,
 };
 
@@ -112,9 +112,9 @@ impl<'s> System<'s> for CollisionSystem {
 
                     ball_attraction_vfx_event_channel.single_write(BallAttractionVfxEvent {
                         ball_entity,
-                        ball_color: Rgb::new(1.0, 1.0, 1.0),
+                        ball_color: Srgba::new(1.0, 1.0, 1.0, 1.0),
                         attraction_line_entity,
-                        attraction_line_alpha: 0.0,
+                        attraction_line_color: Srgba::new(1.0, 1.0, 1.0, 0.0),
                     });
 
                     sticky_balls.insert(ball_entity, sticky).expect("Unable to add entity to storage.");

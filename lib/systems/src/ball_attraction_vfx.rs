@@ -46,15 +46,15 @@ impl<'s> System<'s> for BallAttractionVfxSystem {
             ball_entity,
             ball_color,
             attraction_line_entity,
-            attraction_line_alpha,
+            attraction_line_color,
         } in ball_attraction_vfx_event_channel.read(&mut self.reader)
         {
             if let Some(ball_tint) = tints.get_mut(*ball_entity) {
-                ball_tint.0.color = *ball_color;
+                ball_tint.0 = *ball_color;
             }
 
-            if let Some(line_tint) = tints.get_mut(*attraction_line_entity) {
-                line_tint.0.alpha = *attraction_line_alpha;
+            if let Some(attraction_line_tint) = tints.get_mut(*attraction_line_entity) {
+                attraction_line_tint.0 = *attraction_line_color;
             }
         }
 
