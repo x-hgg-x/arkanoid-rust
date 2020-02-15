@@ -9,12 +9,11 @@ use amethyst::{
     input::InputBundle,
     prelude::*,
     renderer::{
-        plugins::{ RenderFlat2D, RenderToWindow},
+        plugins::{RenderFlat2D, RenderToWindow},
         types::DefaultBackend,
         RenderingBundle,
     },
     ui::{RenderUi, UiBundle},
-    utils::fps_counter::FpsCounterBundle,
 };
 
 pub struct StartingBundle {
@@ -30,7 +29,6 @@ impl<'a, 'b> SystemBundle<'a, 'b> for StartingBundle {
             .with_plugin(RenderUi::default())
             .build(world, builder)?;
 
-        FpsCounterBundle::default().build(world, builder)?;
         TransformBundle::default().build(world, builder)?;
         InputBundle::<ArkanoidBindings>::new().with_bindings_from_file(self.bindings_config_path)?.build(world, builder)?;
         UiBundle::<ArkanoidBindings>::new().build(world, builder)?;
