@@ -9,9 +9,8 @@ use amethyst::{
         Time, Transform,
     },
     derive::SystemDesc,
-    ecs::{Entities, Entity, Join, Read, ReadStorage, System, SystemData as _, World, Write, WriteStorage},
+    ecs::prelude::*,
     input::InputHandler,
-    prelude::*,
     renderer::palette::rgb::Srgba,
     shrev::{EventChannel, ReaderId},
 };
@@ -36,23 +35,24 @@ impl BallAttractionSystem {
     }
 }
 
-type SystemData<'s> = (
-    Entities<'s>,
-    WriteStorage<'s, Ball>,
-    ReadStorage<'s, StickyBall>,
-    ReadStorage<'s, AttractionLine>,
-    ReadStorage<'s, Paddle>,
-    ReadStorage<'s, Transform>,
-    Read<'s, Time>,
-    Read<'s, InputHandler<ArkanoidBindings>>,
-    Read<'s, EventChannel<StopBallAttractionEvent>>,
-    Write<'s, EventChannel<BallAttractionVfxEvent>>,
-);
-
 impl<'s> System<'s> for BallAttractionSystem {
-    type SystemData = SystemData<'s>;
+    type SystemData = (
+        Entities<'s>,
+        WriteStorage<'s, Ball>,
+        ReadStorage<'s, StickyBall>,
+        ReadStorage<'s, AttractionLine>,
+        ReadStorage<'s, Paddle>,
+        ReadStorage<'s, Transform>,
+        Read<'s, Time>,
+        Read<'s, InputHandler<ArkanoidBindings>>,
+        Read<'s, EventChannel<StopBallAttractionEvent>>,
+        Write<'s, EventChannel<BallAttractionVfxEvent>>,
+    );
 
-    fn run(&mut self, (entities, mut balls, sticky_balls, attraction_lines, paddles, transforms, time, input, stop_ball_attraction_event_channel, mut ball_attraction_vfx_event_channel): SystemData) {
+    fn run(
+        &mut self,
+        (entities, mut balls, sticky_balls, attraction_lines, paddles, transforms, time, input, stop_ball_attraction_event_channel, mut ball_attraction_vfx_event_channel): <Self as System>::SystemData,
+    ) {
         let mut is_timeout = false;
 
         if (&mut balls).join().any(|x| x.velocity_mult > 1.0) {

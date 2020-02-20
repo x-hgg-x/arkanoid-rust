@@ -5,8 +5,7 @@ use resources::{Game, GameEvent, NUM_LIFES};
 
 use amethyst::{
     derive::SystemDesc,
-    ecs::{Entities, Join, Read, System, SystemData as _, World, Write, WriteStorage},
-    prelude::*,
+    ecs::prelude::*,
     renderer::SpriteRender,
     shrev::{EventChannel, ReaderId},
 };
@@ -25,19 +24,17 @@ impl BlockHealthSystem {
     }
 }
 
-type SystemData<'s> = (
-    Write<'s, Game>,
-    Entities<'s>,
-    WriteStorage<'s, Block>,
-    WriteStorage<'s, SpriteRender>,
-    Read<'s, EventChannel<BlockCollisionEvent>>,
-    Write<'s, EventChannel<ScoreEvent>>,
-);
-
 impl<'s> System<'s> for BlockHealthSystem {
-    type SystemData = SystemData<'s>;
+    type SystemData = (
+        Write<'s, Game>,
+        Entities<'s>,
+        WriteStorage<'s, Block>,
+        WriteStorage<'s, SpriteRender>,
+        Read<'s, EventChannel<BlockCollisionEvent>>,
+        Write<'s, EventChannel<ScoreEvent>>,
+    );
 
-    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel, mut score_event_channel): SystemData) {
+    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel, mut score_event_channel): <Self as System>::SystemData) {
         for BlockCollisionEvent { entity } in block_collision_event_channel.read(&mut self.reader) {
             if let (Some(block), Some(sprite)) = (blocks.get_mut(*entity), sprites.get_mut(*entity)) {
                 block.health -= 1.0;

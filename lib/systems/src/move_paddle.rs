@@ -5,7 +5,7 @@ use resources::ARENA_WIDTH;
 use amethyst::{
     core::{Time, Transform},
     derive::SystemDesc,
-    ecs::{Join, Read, ReadExpect, ReadStorage, System, SystemData as _, WriteStorage},
+    ecs::prelude::*,
     input::{
         Axis::{Emulated, Mouse},
         InputHandler,
@@ -16,18 +16,16 @@ use amethyst::{
 #[derive(SystemDesc)]
 pub struct MovePaddleSystem;
 
-type SystemData<'s> = (
-    ReadStorage<'s, Paddle>,
-    WriteStorage<'s, Transform>,
-    Read<'s, Time>,
-    ReadExpect<'s, ScreenDimensions>,
-    Read<'s, InputHandler<ArkanoidBindings>>,
-);
-
 impl<'s> System<'s> for MovePaddleSystem {
-    type SystemData = SystemData<'s>;
+    type SystemData = (
+        ReadStorage<'s, Paddle>,
+        WriteStorage<'s, Transform>,
+        Read<'s, Time>,
+        ReadExpect<'s, ScreenDimensions>,
+        Read<'s, InputHandler<ArkanoidBindings>>,
+    );
 
-    fn run(&mut self, (paddles, mut transforms, time, dimensions, input): SystemData) {
+    fn run(&mut self, (paddles, mut transforms, time, dimensions, input): <Self as System>::SystemData) {
         for val in (&paddles, &mut transforms).join() {
             let (paddle, paddle_transform): (&Paddle, &mut Transform) = val;
             let old_x = paddle_transform.translation().x;

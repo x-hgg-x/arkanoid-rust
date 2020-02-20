@@ -9,7 +9,7 @@ use amethyst::{
         Time, Transform,
     },
     derive::SystemDesc,
-    ecs::{Entities, Entity, Join, Read, ReadStorage, System, SystemData as _, Write, WriteStorage},
+    ecs::prelude::*,
     renderer::palette::rgb::Srgba,
     shrev::EventChannel,
 };
@@ -22,24 +22,22 @@ use ncollide2d::{
 #[derive(SystemDesc)]
 pub struct CollisionSystem;
 
-type SystemData<'s> = (
-    Entities<'s>,
-    WriteStorage<'s, Ball>,
-    WriteStorage<'s, StickyBall>,
-    ReadStorage<'s, AttractionLine>,
-    WriteStorage<'s, Transform>,
-    ReadStorage<'s, Paddle>,
-    ReadStorage<'s, Block>,
-    Read<'s, Time>,
-    Write<'s, EventChannel<BlockCollisionEvent>>,
-    Write<'s, EventChannel<LifeEvent>>,
-    Write<'s, EventChannel<ScoreEvent>>,
-    Write<'s, EventChannel<StopBallAttractionEvent>>,
-    Write<'s, EventChannel<BallAttractionVfxEvent>>,
-);
-
 impl<'s> System<'s> for CollisionSystem {
-    type SystemData = SystemData<'s>;
+    type SystemData = (
+        Entities<'s>,
+        WriteStorage<'s, Ball>,
+        WriteStorage<'s, StickyBall>,
+        ReadStorage<'s, AttractionLine>,
+        WriteStorage<'s, Transform>,
+        ReadStorage<'s, Paddle>,
+        ReadStorage<'s, Block>,
+        Read<'s, Time>,
+        Write<'s, EventChannel<BlockCollisionEvent>>,
+        Write<'s, EventChannel<LifeEvent>>,
+        Write<'s, EventChannel<ScoreEvent>>,
+        Write<'s, EventChannel<StopBallAttractionEvent>>,
+        Write<'s, EventChannel<BallAttractionVfxEvent>>,
+    );
 
     fn run(
         &mut self,
@@ -57,7 +55,7 @@ impl<'s> System<'s> for CollisionSystem {
             mut score_event_channel,
             mut stop_ball_attraction_event_channel,
             mut ball_attraction_vfx_event_channel,
-        ): SystemData,
+        ): <Self as System>::SystemData,
     ) {
         // Compute union of blocks
         let block_compound: Compound<f32> = Compound::new(

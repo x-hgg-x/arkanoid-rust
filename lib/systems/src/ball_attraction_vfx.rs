@@ -8,8 +8,7 @@ use amethyst::{
         Transform,
     },
     derive::SystemDesc,
-    ecs::{Join, Read, ReadStorage, System, SystemData as _, World, WriteStorage},
-    prelude::*,
+    ecs::prelude::*,
     renderer::resources::Tint,
     shrev::{EventChannel, ReaderId},
 };
@@ -28,20 +27,18 @@ impl BallAttractionVfxSystem {
     }
 }
 
-type SystemData<'s> = (
-    ReadStorage<'s, Ball>,
-    ReadStorage<'s, StickyBall>,
-    ReadStorage<'s, AttractionLine>,
-    ReadStorage<'s, Paddle>,
-    WriteStorage<'s, Tint>,
-    WriteStorage<'s, Transform>,
-    Read<'s, EventChannel<BallAttractionVfxEvent>>,
-);
-
 impl<'s> System<'s> for BallAttractionVfxSystem {
-    type SystemData = SystemData<'s>;
+    type SystemData = (
+        ReadStorage<'s, Ball>,
+        ReadStorage<'s, StickyBall>,
+        ReadStorage<'s, AttractionLine>,
+        ReadStorage<'s, Paddle>,
+        WriteStorage<'s, Tint>,
+        WriteStorage<'s, Transform>,
+        Read<'s, EventChannel<BallAttractionVfxEvent>>,
+    );
 
-    fn run(&mut self, (balls, sticky_balls, attraction_lines, paddles, mut tints, mut transforms, ball_attraction_vfx_event_channel): SystemData) {
+    fn run(&mut self, (balls, sticky_balls, attraction_lines, paddles, mut tints, mut transforms, ball_attraction_vfx_event_channel): <Self as System>::SystemData) {
         for BallAttractionVfxEvent {
             ball_entity,
             ball_color,

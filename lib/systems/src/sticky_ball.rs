@@ -8,7 +8,7 @@ use amethyst::{
         Time, Transform,
     },
     derive::SystemDesc,
-    ecs::{Entities, Join, Read, ReadStorage, System, SystemData as _, WriteStorage},
+    ecs::prelude::*,
     input::InputHandler,
 };
 
@@ -17,20 +17,18 @@ pub struct StickyBallSystem {
     time: f32,
 }
 
-type SystemData<'s> = (
-    Entities<'s>,
-    ReadStorage<'s, Paddle>,
-    WriteStorage<'s, Ball>,
-    WriteStorage<'s, StickyBall>,
-    WriteStorage<'s, Transform>,
-    Read<'s, Time>,
-    Read<'s, InputHandler<ArkanoidBindings>>,
-);
-
 impl<'s> System<'s> for StickyBallSystem {
-    type SystemData = SystemData<'s>;
+    type SystemData = (
+        Entities<'s>,
+        ReadStorage<'s, Paddle>,
+        WriteStorage<'s, Ball>,
+        WriteStorage<'s, StickyBall>,
+        WriteStorage<'s, Transform>,
+        Read<'s, Time>,
+        Read<'s, InputHandler<ArkanoidBindings>>,
+    );
 
-    fn run(&mut self, (entities, paddles, mut balls, mut sticky_balls, mut transforms, time, input): SystemData) {
+    fn run(&mut self, (entities, paddles, mut balls, mut sticky_balls, mut transforms, time, input): <Self as System>::SystemData) {
         if let Some(val) = (&paddles, &transforms).join().next().map(|(paddle, paddle_transform)| (paddle.width, paddle_transform.translation().x)) {
             let (paddle_width, paddle_x): (f32, f32) = val;
 

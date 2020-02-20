@@ -3,18 +3,16 @@ use components::{Ball, StickyBall};
 use amethyst::{
     core::{Time, Transform},
     derive::SystemDesc,
-    ecs::{Join, Read, ReadStorage, System, SystemData as _, WriteStorage},
+    ecs::prelude::*,
 };
 
 #[derive(SystemDesc)]
 pub struct MoveBallSystem;
 
-type SystemData<'s> = (ReadStorage<'s, Ball>, ReadStorage<'s, StickyBall>, WriteStorage<'s, Transform>, Read<'s, Time>);
-
 impl<'s> System<'s> for MoveBallSystem {
-    type SystemData = SystemData<'s>;
+    type SystemData = (ReadStorage<'s, Ball>, ReadStorage<'s, StickyBall>, WriteStorage<'s, Transform>, Read<'s, Time>);
 
-    fn run(&mut self, (balls, sticky_balls, mut transforms, time): SystemData) {
+    fn run(&mut self, (balls, sticky_balls, mut transforms, time): <Self as System>::SystemData) {
         for val in (&balls, !&sticky_balls, &mut transforms).join() {
             let (ball, _, ball_transform): (&Ball, (), &mut Transform) = val;
 

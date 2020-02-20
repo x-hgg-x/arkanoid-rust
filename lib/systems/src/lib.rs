@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 mod ball_attraction;
 mod ball_attraction_vfx;
 mod block_health;
