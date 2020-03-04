@@ -101,12 +101,14 @@ impl<'s> System<'s> for CollisionSystem {
 
                 // Lose a life when ball reach the bottom of the arena
                 if ball_y <= ball.radius {
-                    let sticky = StickyBall {
-                        width_extent: paddle.width / 2.0,
-                        period: 2.0,
-                    };
-
                     ball.velocity_mult = 1.0;
+                    ball_transform.set_translation_x(paddle_x);
+                    ball_transform.set_translation_y(paddle.height + ball.radius);
+
+                    sticky_balls.insert(ball_entity, StickyBall { period: 2.0 }).expect("Unable to add entity to storage.");
+
+                    life_event_channel.single_write(LifeEvent);
+                    score_event_channel.single_write(ScoreEvent { score: -1000 });
 
                     ball_attraction_vfx_event_channel.single_write(BallAttractionVfxEvent {
                         ball_entity,
@@ -114,11 +116,6 @@ impl<'s> System<'s> for CollisionSystem {
                         attraction_line_entity,
                         attraction_line_color: Srgba::new(1.0, 1.0, 1.0, 0.0),
                     });
-
-                    sticky_balls.insert(ball_entity, sticky).expect("Unable to add entity to storage.");
-                    ball_transform.set_translation_xyz(paddle_x, paddle.height + ball.radius, 0.0);
-                    life_event_channel.single_write(LifeEvent);
-                    score_event_channel.single_write(ScoreEvent { score: -1000 });
                 }
 
                 // Bounce at the paddle

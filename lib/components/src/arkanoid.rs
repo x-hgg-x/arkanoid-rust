@@ -31,7 +31,6 @@ pub struct Ball {
 #[prefab(Component)]
 #[serde(deny_unknown_fields)]
 pub struct StickyBall {
-    pub width_extent: f32,
     pub period: f32,
 }
 

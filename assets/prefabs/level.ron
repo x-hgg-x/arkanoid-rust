@@ -73,10 +73,7 @@ Prefab(
                         velocity_mult: 1.0,
                         direction: [0.0, 1.0],
                     ),
-                    sticky: (
-                        width_extent: 52.0,
-                        period: 2.0,
-                    )
+                    sticky: (period: 2.0)
                 )
             ),
         ),
