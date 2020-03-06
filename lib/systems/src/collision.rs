@@ -99,8 +99,26 @@ impl<'s> System<'s> for CollisionSystem {
                     ball.direction.as_mut_unchecked().y = -ball.direction.y.abs();
                 }
 
+                // Bounce at the paddle
+                let mut bounced = false;
+                let ball_shape = BallShape::new(ball.radius);
+                let ball_pos = Isometry2::new([ball_x, ball_y].into(), 0.0);
+
+                let paddle_shape = Cuboid::new([paddle.width / 2.0, paddle.height / 2.0].into());
+                let paddle_pos = Isometry2::new([paddle_x, paddle_y].into(), 0.0);
+
+                if query::contact(&paddle_pos, &paddle_shape, &ball_pos, &ball_shape, 0.0).is_some() {
+                    bounced = true;
+                    let angle = ((paddle_x - ball_transform.translation().x) / paddle.width * f32::pi()).min(f32::pi() / 3.0).max(-f32::pi() / 3.0);
+                    ball.direction = Unit::new_unchecked([-angle.sin(), angle.cos()].into());
+
+                    stop_ball_attraction_event_channel.single_write(StopBallAttractionEvent {
+                        collision_time: time.absolute_time_seconds(),
+                    });
+                }
+
                 // Lose a life when ball reach the bottom of the arena
-                if ball_y <= ball.radius {
+                if ball_y <= ball.radius && !bounced {
                     ball.velocity_mult = 1.0;
                     ball_transform.set_translation_x(paddle_x);
                     ball_transform.set_translation_y(paddle.height + ball.radius);
@@ -115,22 +133,6 @@ impl<'s> System<'s> for CollisionSystem {
                         ball_color: Srgba::new(1.0, 1.0, 1.0, 1.0),
                         attraction_line_entity,
                         attraction_line_color: Srgba::new(1.0, 1.0, 1.0, 0.0),
-                    });
-                }
-
-                // Bounce at the paddle
-                let ball_shape = BallShape::new(ball.radius);
-                let ball_pos = Isometry2::new([ball_x, ball_y].into(), 0.0);
-
-                let paddle_shape = Cuboid::new([paddle.width / 2.0, paddle.height / 2.0].into());
-                let paddle_pos = Isometry2::new([paddle_x, paddle_y].into(), 0.0);
-
-                if query::contact(&paddle_pos, &paddle_shape, &ball_pos, &ball_shape, 0.0).is_some() {
-                    let angle = ((paddle_x - ball_transform.translation().x) / paddle.width * f32::pi()).min(f32::pi() / 3.0).max(-f32::pi() / 3.0);
-                    ball.direction = Unit::new_unchecked([-angle.sin(), angle.cos()].into());
-
-                    stop_ball_attraction_event_channel.single_write(StopBallAttractionEvent {
-                        collision_time: time.absolute_time_seconds(),
                     });
                 }
 
