@@ -44,6 +44,9 @@ impl<'s> System<'s> for StickyBallSystem {
                 // Set ball direction
                 let angle = (paddle_x - ball_transform.translation().x) / paddle_width * f32::pi();
                 ball.direction = Unit::new_unchecked([-angle.sin(), angle.cos()].into());
+
+                // Reset ball velocity
+                ball.velocity_mult = 1.0
             }
 
             if let Some(true) = input.action_is_down(&ActionBinding::ReleaseBall) {
