@@ -12,7 +12,7 @@ pub struct MoveBallSystem;
 impl<'s> System<'s> for MoveBallSystem {
     type SystemData = (ReadStorage<'s, Ball>, ReadStorage<'s, StickyBall>, WriteStorage<'s, Transform>, Read<'s, Time>);
 
-    fn run(&mut self, (balls, sticky_balls, mut transforms, time): <Self as System>::SystemData) {
+    fn run(&mut self, (balls, sticky_balls, mut transforms, time): Self::SystemData) {
         for val in (&balls, !&sticky_balls, &mut transforms).join() {
             let (ball, _, ball_transform): (&Ball, (), &mut Transform) = val;
 

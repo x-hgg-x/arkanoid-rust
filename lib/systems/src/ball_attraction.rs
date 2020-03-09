@@ -49,10 +49,7 @@ impl<'s> System<'s> for BallAttractionSystem {
         Write<'s, EventChannel<BallAttractionVfxEvent>>,
     );
 
-    fn run(
-        &mut self,
-        (entities, mut balls, sticky_balls, attraction_lines, paddles, transforms, time, input, stop_ball_attraction_event_channel, mut ball_attraction_vfx_event_channel): <Self as System>::SystemData,
-    ) {
+    fn run(&mut self, (entities, mut balls, sticky_balls, attraction_lines, paddles, transforms, time, input, stop_ball_attraction_event_channel, mut ball_attraction_vfx_event_channel): Self::SystemData) {
         if (&mut balls).join().any(|x| x.velocity_mult > 1.0) {
             for StopBallAttractionEvent { collision_time } in stop_ball_attraction_event_channel.read(&mut self.reader) {
                 if self.last_collision_time < self.time_accelerated {

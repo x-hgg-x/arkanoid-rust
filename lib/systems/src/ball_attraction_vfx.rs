@@ -38,7 +38,7 @@ impl<'s> System<'s> for BallAttractionVfxSystem {
         Read<'s, EventChannel<BallAttractionVfxEvent>>,
     );
 
-    fn run(&mut self, (balls, sticky_balls, attraction_lines, paddles, mut tints, mut transforms, ball_attraction_vfx_event_channel): <Self as System>::SystemData) {
+    fn run(&mut self, (balls, sticky_balls, attraction_lines, paddles, mut tints, mut transforms, ball_attraction_vfx_event_channel): Self::SystemData) {
         for BallAttractionVfxEvent {
             ball_entity,
             ball_color,
@@ -58,10 +58,7 @@ impl<'s> System<'s> for BallAttractionVfxSystem {
         if let Some(val) = (&paddles, &transforms).join().next().map(|(paddle, paddle_transform)| (paddle.height, *paddle_transform.translation())) {
             let (paddle_height, paddle_translation): (f32, Vector3<f32>) = val;
 
-            let balls: Vec<(&Ball, Vector3<f32>)> = (&balls, !&sticky_balls, &transforms)
-                .join()
-                .map(|(ball, _, ball_transform)| (ball, *ball_transform.translation()))
-                .collect();
+            let balls: Vec<(&Ball, Vector3<f32>)> = (&balls, !&sticky_balls, &transforms).join().map(|(ball, _, ball_transform)| (ball, *ball_transform.translation())).collect();
 
             for val in balls
                 .into_iter()

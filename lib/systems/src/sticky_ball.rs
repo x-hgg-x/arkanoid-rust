@@ -28,7 +28,7 @@ impl<'s> System<'s> for StickyBallSystem {
         Read<'s, InputHandler<ArkanoidBindings>>,
     );
 
-    fn run(&mut self, (entities, paddles, mut balls, mut sticky_balls, mut transforms, time, input): <Self as System>::SystemData) {
+    fn run(&mut self, (entities, paddles, mut balls, mut sticky_balls, mut transforms, time, input): Self::SystemData) {
         if let Some(val) = (&paddles, &transforms).join().next().map(|(paddle, paddle_transform)| (paddle.width, paddle_transform.translation().x)) {
             let (paddle_width, paddle_x): (f32, f32) = val;
 

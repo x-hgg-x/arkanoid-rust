@@ -26,7 +26,7 @@ impl LifeSystem {
 impl<'s> System<'s> for LifeSystem {
     type SystemData = (Write<'s, Game>, WriteStorage<'s, UiText>, UiFinder<'s>, Read<'s, EventChannel<LifeEvent>>);
 
-    fn run(&mut self, (mut game, mut ui_texts, ui_finder, life_event_channel): <Self as System>::SystemData) {
+    fn run(&mut self, (mut game, mut ui_texts, ui_finder, life_event_channel): Self::SystemData) {
         for _event in life_event_channel.read(&mut self.reader) {
             game.lifes -= 1;
 

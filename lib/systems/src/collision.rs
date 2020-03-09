@@ -55,7 +55,7 @@ impl<'s> System<'s> for CollisionSystem {
             mut score_event_channel,
             mut stop_ball_attraction_event_channel,
             mut ball_attraction_vfx_event_channel,
-        ): <Self as System>::SystemData,
+        ): Self::SystemData,
     ) {
         // Compute union of blocks
         let block_compound: Compound<f32> = Compound::new(

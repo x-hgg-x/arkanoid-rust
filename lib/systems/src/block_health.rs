@@ -34,7 +34,7 @@ impl<'s> System<'s> for BlockHealthSystem {
         Write<'s, EventChannel<ScoreEvent>>,
     );
 
-    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel, mut score_event_channel): <Self as System>::SystemData) {
+    fn run(&mut self, (mut game, entities, mut blocks, mut sprites, block_collision_event_channel, mut score_event_channel): Self::SystemData) {
         for BlockCollisionEvent { entity } in block_collision_event_channel.read(&mut self.reader) {
             if let (Some(block), Some(sprite)) = (blocks.get_mut(*entity), sprites.get_mut(*entity)) {
                 block.health -= 1.0;

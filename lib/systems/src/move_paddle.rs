@@ -25,7 +25,7 @@ impl<'s> System<'s> for MovePaddleSystem {
         Read<'s, InputHandler<ArkanoidBindings>>,
     );
 
-    fn run(&mut self, (paddles, mut transforms, time, dimensions, input): <Self as System>::SystemData) {
+    fn run(&mut self, (paddles, mut transforms, time, dimensions, input): Self::SystemData) {
         for val in (&paddles, &mut transforms).join() {
             let (paddle, paddle_transform): (&Paddle, &mut Transform) = val;
             let old_x = paddle_transform.translation().x;
