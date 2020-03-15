@@ -10,7 +10,7 @@ Label(
         pivot: TopRight,
     ),
     text: (
-        text: "LIFES: 5",
+        text: "LIVES: 5",
         font: File("fonts/joystix.ttf", ("TTF", ())),
         font_size: 30.0,
         color: (1.0, 1.0, 1.0, 1.0),

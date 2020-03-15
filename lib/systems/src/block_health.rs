@@ -1,7 +1,7 @@
 use crate::{BlockCollisionEvent, ScoreEvent};
 
 use components::Block;
-use resources::{Game, GameEvent, NUM_LIFES};
+use resources::{Game, GameEvent, NUM_LIVES};
 
 use amethyst::{
     derive::SystemDesc,
@@ -47,7 +47,7 @@ impl<'s> System<'s> for BlockHealthSystem {
             }
         }
 
-        let game_beginning = game.lifes == NUM_LIFES && game.score == 0;
+        let game_beginning = game.lives == NUM_LIVES && game.score == 0;
         if (&blocks).join().next().is_none() && !game_beginning {
             game.event = Some(GameEvent::LevelComplete);
         }

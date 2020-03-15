@@ -4,17 +4,17 @@ pub enum GameEvent {
 }
 
 pub struct Game {
-    pub lifes: i32,
+    pub lives: i32,
     pub score: i32,
     pub event: Option<GameEvent>,
 }
 
-pub const NUM_LIFES: i32 = 5;
+pub const NUM_LIVES: i32 = 5;
 
 impl Default for Game {
     fn default() -> Self {
         Self {
-            lifes: NUM_LIFES,
+            lives: NUM_LIVES,
             score: 0,
             event: None,
         }
