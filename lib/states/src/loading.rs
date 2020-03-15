@@ -4,6 +4,7 @@ use components::{ArkanoidPrefabData, CameraPrefabData, GamePrefabHandles, MenuPr
 
 use amethyst::{
     assets::{PrefabLoader, ProgressCounter, RonFormat},
+    controls::HideCursor,
     prelude::*,
     renderer::sprite::prefab::SpriteScenePrefab,
     ui::UiLoader,
@@ -16,14 +17,13 @@ pub struct LoadingState {
 
 impl SimpleState for LoadingState {
     fn on_start(&mut self, data: StateData<GameData>) {
-        type SystemData<'s> = (
-            UiLoader<'s>,
-            PrefabLoader<'s, CameraPrefabData>,
-            PrefabLoader<'s, SpriteScenePrefab>,
-            PrefabLoader<'s, ArkanoidPrefabData>,
-        );
-
         let world = data.world;
+
+        // Show cursor
+        *world.write_resource() = HideCursor { hide: false };
+
+        type SystemData<'s> = (UiLoader<'s>, PrefabLoader<'s, CameraPrefabData>, PrefabLoader<'s, SpriteScenePrefab>, PrefabLoader<'s, ArkanoidPrefabData>);
+
         let prefab_handles = world.exec(|(ui_loader, camera_loader, sprite_loader, arkanoid_loader): SystemData| PrefabHandles {
             menu: MenuPrefabHandles {
                 main_menu: ui_loader.load("ui/main_menu.ron", &mut self.progress_counter),

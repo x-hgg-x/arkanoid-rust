@@ -4,6 +4,7 @@ use components::PrefabHandles;
 use resources::{CurrentState, Game, GameEvent};
 
 use amethyst::{
+    controls::HideCursor,
     ecs::Join,
     input::{is_key_down, VirtualKeyCode},
     prelude::*,
@@ -25,14 +26,19 @@ impl SimpleState for GameplayState {
         world.create_entity().with(game_handles.life).build();
 
         *world.write_resource() = CurrentState::Running;
+        *world.write_resource() = HideCursor { hide: true };
     }
 
     fn on_pause(&mut self, data: StateData<GameData>) {
-        *data.world.write_resource() = CurrentState::Paused;
+        let world = data.world;
+        *world.write_resource() = CurrentState::Paused;
+        *world.write_resource() = HideCursor { hide: false };
     }
 
     fn on_resume(&mut self, data: StateData<GameData>) {
-        *data.world.write_resource() = CurrentState::Running;
+        let world = data.world;
+        *world.write_resource() = CurrentState::Running;
+        *world.write_resource() = HideCursor { hide: true };
     }
 
     fn on_stop(&mut self, data: StateData<GameData>) {
@@ -42,6 +48,7 @@ impl SimpleState for GameplayState {
 
         *world.write_resource() = CurrentState::Paused;
         *world.write_resource::<Game>() = Default::default();
+        *world.write_resource() = HideCursor { hide: false };
     }
 
     fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans {

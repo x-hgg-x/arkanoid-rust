@@ -4,6 +4,7 @@ use bindings::ArkanoidBindings;
 
 use amethyst::{
     assets::Processor,
+    controls::{CursorHideSystemDesc, MouseFocusUpdateSystemDesc},
     core::{SystemBundle, TransformBundle},
     ecs::{prelude::*, DispatcherBuilder, ReadExpect},
     error::Error,
@@ -40,6 +41,8 @@ impl<'a, 'b> SystemBundle<'a, 'b> for StartingBundle {
         builder.add(Processor::<SpriteSheet>::new(), "sprite_sheet_processor", &[]);
         builder.add(SpriteVisibilitySortingSystem::new(), "sprite_visibility_sorting_system", &[]);
         builder.add(TextureProcessorSystem::<DefaultBackend>::default(), "texture_processor", &[]);
+        builder.add(MouseFocusUpdateSystemDesc::default().build(world), "mouse_focus", &[]);
+        builder.add(CursorHideSystemDesc::default().build(world), "cursor_hide", &["mouse_focus"]);
         WindowBundle::from_config_path(self.display_config_path)?.build(world, builder)?;
         builder.add_thread_local(RenderingSystem::<DefaultBackend, _>::new(RenderGraph::default()));
 
