@@ -6,4 +6,4 @@ edition = "2018"
 [dependencies]
 components = { path = "../components" }
 resources = { path = "../resources" }
-amethyst = { version = "0.14", features = ["vulkan"] }
+amethyst = { version = "0.15", features = ["vulkan"] }

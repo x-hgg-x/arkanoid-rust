@@ -23,7 +23,11 @@ use amethyst::{
         sprite_visibility::SpriteVisibilitySortingSystem,
         Factory, Format, GraphBuilder, GraphCreator, Kind, RenderGroupDesc, RenderingSystem, SpriteSheet, SubpassBuilder, TextureProcessorSystem,
     },
-    ui::{DrawUiDesc, UiBundle, UiGlyphsSystemDesc},
+    ui::{
+        BlinkSystem, CacheSelectionOrderSystem, DragWidgetSystemDesc, DrawUiDesc, FontAsset, NoCustomUi, ResizeSystemDesc, SelectionKeyboardSystemDesc, SelectionMouseSystemDesc, TextEditingInputSystemDesc,
+        TextEditingMouseSystemDesc, ToNativeWidget, UiButtonActionRetriggerSystemDesc, UiButtonSystemDesc, UiGlyphsSystemDesc, UiLoaderSystemDesc, UiMouseSystem, UiSoundRetriggerSystemDesc, UiSoundSystemDesc,
+        UiTransformSystemDesc,
+    },
     window::{ScreenDimensions, Window, WindowBundle},
 };
 
@@ -34,9 +38,27 @@ pub struct StartingBundle {
 
 impl<'a, 'b> SystemBundle<'a, 'b> for StartingBundle {
     fn build(self, world: &mut World, builder: &mut DispatcherBuilder<'a, 'b>) -> Result<(), Error> {
+        // TransformBundle
         TransformBundle::default().build(world, builder)?;
-        UiBundle::<ArkanoidBindings>::new().build(world, builder)?;
 
+        // UiBundle systems
+        builder.add(UiLoaderSystemDesc::<<NoCustomUi as ToNativeWidget>::PrefabData, u32>::default().build(world), "ui_loader", &[]);
+        builder.add(UiTransformSystemDesc::default().build(world), "ui_transform", &["transform_system"]);
+        builder.add(Processor::<FontAsset>::new(), "font_processor", &["ui_loader"]);
+        builder.add(CacheSelectionOrderSystem::<()>::new(), "selection_order_cache", &[]);
+        builder.add(SelectionMouseSystemDesc::<(), ArkanoidBindings>::default().build(world), "ui_mouse_selection", &[]);
+        builder.add(SelectionKeyboardSystemDesc::<()>::default().build(world), "ui_keyboard_selection", &["ui_mouse_selection"]);
+        builder.add(TextEditingMouseSystemDesc::default().build(world), "ui_text_editing_mouse_system", &["ui_mouse_selection", "ui_keyboard_selection"]);
+        builder.add(TextEditingInputSystemDesc::default().build(world), "ui_text_editing_input_system", &["ui_mouse_selection", "ui_keyboard_selection"]);
+        builder.add(ResizeSystemDesc::default().build(world), "ui_resize_system", &[]);
+        builder.add(UiButtonSystemDesc::default().build(world), "ui_button_system", &[]);
+        builder.add(DragWidgetSystemDesc::<ArkanoidBindings>::default().build(world), "ui_drag_system", &[]);
+        builder.add(UiButtonActionRetriggerSystemDesc::default().build(world), "ui_button_action_retrigger_system", &["ui_button_system"]);
+        builder.add(UiSoundSystemDesc::default().build(world), "ui_sound_system", &[]);
+        builder.add(UiSoundRetriggerSystemDesc::default().build(world), "ui_sound_retrigger_system", &["ui_sound_system"]);
+        builder.add(BlinkSystem, "blink_system", &[]);
+
+        // Other various systems
         builder.add(UiGlyphsSystemDesc::<DefaultBackend>::default().build(world), "ui_glyphs_system", &[]);
         builder.add(Processor::<SpriteSheet>::new(), "sprite_sheet_processor", &[]);
         builder.add(SpriteVisibilitySortingSystem::new(), "sprite_visibility_sorting_system", &[]);
@@ -46,7 +68,9 @@ impl<'a, 'b> SystemBundle<'a, 'b> for StartingBundle {
         WindowBundle::from_config_path(self.display_config_path)?.build(world, builder)?;
         builder.add_thread_local(RenderingSystem::<DefaultBackend, _>::new(RenderGraph::default()));
 
+        // Input system and depending systems
         builder.add_thread_local(InputSystemDesc::<ArkanoidBindings>::new(Some(Bindings::load(self.bindings_config_path)?)).build(world));
+        builder.add_thread_local(UiMouseSystem::<ArkanoidBindings>::new());
 
         Ok(())
     }

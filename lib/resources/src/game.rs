@@ -13,10 +13,6 @@ pub const NUM_LIVES: i32 = 5;
 
 impl Default for Game {
     fn default() -> Self {
-        Self {
-            lives: NUM_LIVES,
-            score: 0,
-            event: None,
-        }
+        Self { lives: NUM_LIVES, score: 0, event: None }
     }
 }
