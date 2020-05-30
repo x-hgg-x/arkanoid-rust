@@ -4,6 +4,7 @@ use amethyst::{
     derive::PrefabData,
     ecs::Entity,
     renderer::camera::CameraPrefab,
+    utils::ortho_camera::CameraOrtho,
     Error,
 };
 
@@ -13,5 +14,6 @@ use serde::{Deserialize, Serialize};
 #[serde(deny_unknown_fields)]
 pub struct CameraPrefabData {
     camera: CameraPrefab,
+    camera_ortho: CameraOrtho,
     transform: Transform,
 }
