@@ -71,7 +71,8 @@ impl SimpleState for LevelCompleteState {
         if !self.score_updated {
             data.world.exec(|(ui_finder, mut ui_texts): (UiFinder, WriteStorage<UiText>)| {
                 if let Some(ui_text) = ui_finder.find(SCORE_TEXT_ID).and_then(|entity| ui_texts.get_mut(entity)) {
-                    ui_text.text = format!("SCORE: {}", self.score);
+                    let score = self.score;
+                    ui_text.text = format!("SCORE: {score}");
                     self.score_updated = true;
                 }
             });

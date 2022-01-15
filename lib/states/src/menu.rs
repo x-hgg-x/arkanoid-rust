@@ -19,13 +19,13 @@ pub trait Menu {
 
         match event {
             StateEvent::Window(event) => {
-                if is_key_down(&event, VirtualKeyCode::Down) {
+                if is_key_down(event, VirtualKeyCode::Down) {
                     self.set_selection((selection + 1).rem_euclid(num_items.try_into().unwrap()));
                 }
-                if is_key_down(&event, VirtualKeyCode::Up) {
+                if is_key_down(event, VirtualKeyCode::Up) {
                     self.set_selection((selection - 1).rem_euclid(num_items.try_into().unwrap()));
                 }
-                if is_key_down(&event, VirtualKeyCode::Return) || is_key_down(&event, VirtualKeyCode::Space) {
+                if is_key_down(event, VirtualKeyCode::Return) || is_key_down(event, VirtualKeyCode::Space) {
                     return self.confirm_selection();
                 }
             }
@@ -40,7 +40,7 @@ pub trait Menu {
                     }
                 }
             }
-            _ => {}
+            _ => (),
         }
 
         let cursor_entities: Vec<_> = world.exec(|ui_finder: UiFinder| self.get_cursor_menu_ids().iter().filter_map(|id| ui_finder.find(id)).collect());

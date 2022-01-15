@@ -44,7 +44,8 @@ impl SimpleState for LoadingState {
     }
 
     fn update(&mut self, _data: &mut StateData<GameData>) -> SimpleTrans {
-        println!("Loading: {}%", 100 * self.progress_counter.num_finished() / self.progress_counter.num_assets());
+        let progress = 100 * self.progress_counter.num_finished() / self.progress_counter.num_assets();
+        println!("Loading: {progress}%");
 
         if self.progress_counter.num_failed() > 0 {
             println!("Error when loading assets.");

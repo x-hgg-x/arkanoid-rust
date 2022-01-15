@@ -31,7 +31,8 @@ impl<'s> System<'s> for LifeSystem {
             game.lives -= 1;
 
             if let Some(ui_text) = ui_finder.find(LIFE_TEXT_ID).and_then(|entity| ui_texts.get_mut(entity)) {
-                ui_text.text = format!("LIVES: {}", game.lives);
+                let game_lives = game.lives;
+                ui_text.text = format!("LIVES: {game_lives}");
             }
 
             if game.lives <= 0 {

@@ -31,7 +31,8 @@ impl<'s> System<'s> for ScoreSystem {
             game.score += score;
 
             if let Some(ui_text) = ui_finder.find(SCORE_TEXT_ID).and_then(|entity| ui_texts.get_mut(entity)) {
-                ui_text.text = format!("SCORE: {}", game.score);
+                let game_score = game.score;
+                ui_text.text = format!("SCORE: {game_score}");
             }
         }
     }
