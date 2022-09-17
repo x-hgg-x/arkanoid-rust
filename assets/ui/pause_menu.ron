@@ -22,7 +22,7 @@ Container(
             ),
             text: (
                 text: "\u{25ba}",
-                font: File("fonts/hack.ttf", ("TTF", ())),
+                font: File("lfs/fonts/hack.ttf", ("TTF", ())),
                 font_size: 50.0,
                 color: (1.0, 1.0, 1.0, 1.0),
             ),
@@ -39,7 +39,7 @@ Container(
             ),
             text: (
                 text: "\u{25ba}",
-                font: File("fonts/hack.ttf", ("TTF", ())),
+                font: File("lfs/fonts/hack.ttf", ("TTF", ())),
                 font_size: 50.0,
                 color: (1.0, 1.0, 1.0, 0.0),
             ),
@@ -56,7 +56,7 @@ Container(
             ),
             text: (
                 text: "\u{25ba}",
-                font: File("fonts/hack.ttf", ("TTF", ())),
+                font: File("lfs/fonts/hack.ttf", ("TTF", ())),
                 font_size: 50.0,
                 color: (1.0, 1.0, 1.0, 0.0),
             ),
@@ -73,7 +73,7 @@ Container(
             ),
             text: (
                 text: "RESUME",
-                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font: File("lfs/fonts/joystix.ttf", ("TTF", ())),
                 font_size: 50.0,
                 color: (1.0, 1.0, 1.0, 1.0),
             ),
@@ -90,7 +90,7 @@ Container(
             ),
             text: (
                 text: "MAIN MENU",
-                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font: File("lfs/fonts/joystix.ttf", ("TTF", ())),
                 font_size: 50.0,
                 color: (1.0, 1.0, 1.0, 1.0),
             ),
@@ -107,7 +107,7 @@ Container(
             ),
             text: (
                 text: "EXIT",
-                font: File("fonts/joystix.ttf", ("TTF", ())),
+                font: File("lfs/fonts/joystix.ttf", ("TTF", ())),
                 font_size: 50.0,
                 color: (1.0, 1.0, 1.0, 1.0),
             ),

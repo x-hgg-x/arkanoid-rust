@@ -4,7 +4,7 @@ Prefab(
         (
             data: (
                 sheet: Sheet(
-                    texture: File("textures/background.png", (
+                    texture: File("lfs/textures/background.png", (
                         "IMAGE", (
                             sampler_info: (
                                 min_filter: Nearest,

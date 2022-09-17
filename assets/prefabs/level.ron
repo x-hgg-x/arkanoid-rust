@@ -5,7 +5,7 @@ Prefab(
             data: (
                 sprite_scene: (
                     sheet: Sheet(
-                        texture: File("textures/spritesheet.png", (
+                        texture: File("lfs/textures/spritesheet.png", (
                             "IMAGE", (
                                 sampler_info: (
                                     min_filter: Nearest,

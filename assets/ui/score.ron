@@ -11,7 +11,7 @@ Label(
     ),
     text: (
         text: "SCORE: 0",
-        font: File("fonts/joystix.ttf", ("TTF", ())),
+        font: File("lfs/fonts/joystix.ttf", ("TTF", ())),
         font_size: 30.0,
         color: (1.0, 1.0, 1.0, 1.0),
     ),

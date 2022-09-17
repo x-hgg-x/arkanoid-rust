@@ -18,6 +18,8 @@ Prefab(
                         right: 360.0,
                         bottom: -300.0,
                         top: 300.0,
+                        near: 0.1,
+                        far: 2000.0,
                     ),
                     aspect_ratio_cache: 1.2,
                 ),
